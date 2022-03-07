@@ -12,7 +12,7 @@ TESTS = ${wildcard test/*.cpp}
 SOURCE_OBJECTS = ${patsubst %.cpp, %.o, ${SOURCES}}
 TEST_OBJECTS = ${patsubst %.cpp, %.o, ${TESTS}}
 
-EXECUTABLE = bin/TestAll
+EXECUTABLE = bin/TestAll.exe
 
 all: build ${EXECUTABLE} 
 
