@@ -19,11 +19,6 @@ class MemoryTest: public ::testing::Test {
 
         const byte2 in16_1s { 0b1111'1111'1111'1111u };
         const byte2 in16_0s { 0b0000'0000'0000'0000u };
-        const byte2 in16_rand { 0b1101'0100'0110'1110u };
-
-        const byte2 load16_1s { 0b1111'1111'1111'1111u };
-        const byte2 load16_0s { 0b0000'0000'0000'0000u };
-        const byte2 load16_rand { 0b0100'1111'1010'0001u };
 };
 
 TEST_F(MemoryTest, DataFlipFLop_test) {
@@ -71,26 +66,20 @@ TEST_F(MemoryTest, Register16_test) {
     ASSERT_EQ(result, expected);
 
     // in = 1s, load = 1s
-    r16.Update(in16_1s, load16_1s);
+    r16.Update(in16_1s, load_1);
     result = r16.Out();
     expected = 0b1111'1111'1111'1111u;
     ASSERT_EQ(result, expected);
 
     // in = 0s, load = 0s
-    r16.Update(in16_0s, load16_0s);
+    r16.Update(in16_0s, load_0);
     result = r16.Out();
     expected = 0b1111'1111'1111'1111u;
     ASSERT_EQ(result, expected);
 
     // in = 0s, load = 1s
-    r16.Update(in16_0s, load16_1s);
+    r16.Update(in16_0s, load_1);
     result = r16.Out();
     expected = 0b0000'0000'0000'0000u;
-    ASSERT_EQ(result, expected);
-
-    // in = rand, load = rand
-    r16.Update(in16_rand, load16_rand);
-    result = r16.Out();
-    expected = 0b0100'0100'0010'0000u;
     ASSERT_EQ(result, expected);
 }
