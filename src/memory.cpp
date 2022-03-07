@@ -21,23 +21,24 @@ void RegisterBit::Update(const bit& in, const bit& load) {
     dff_.Update(mux_out);
 }
 
-/*
-bit RegisterBit(const bit& in, const bit& load, bit& prev_out, bit& prev_in) {
-    //std::cout << "RB_in: " << in << ", RB_load: " << load << ", RB_prev_out: " << prev_out << std::endl;
-    bit out{ DataFlipFLop(Mux(prev_out, in, load), prev_in) };
-    prev_out = out;
-    return out;
-} 
-
-byte2 Register16(const byte2& in, const bit& load, byte2& prev_out, byte2& prev_in) {
-    byte2 out{};
+Register16::Register16() {
     for (int i = 0; i < 16; i++) {
-        bit prev_in_bit{ prev_in[i] };
-        bit prev_out_bit{ prev_out[i] };
-        out[i] = RegisterBit((bit)in[i], load, prev_out_bit, prev_in_bit)[0];
-        prev_out[i] = out[i];
-        prev_in[i] = in[i];
+        registers_.push_back(RegisterBit());
     }
-    return out; 
 }
-*/
+
+byte2 Register16::Out() {
+    byte2 result {};
+    for (int i = 0; i < 16; i++) {
+        result[i] = registers_[i].Out()[0];
+    }
+    return result;
+}
+
+void Register16::Update(const byte2& in, const byte2& load) {
+    for (int i = 0; i < 16; i++) {
+        bit in_bit = in[i];
+        bit load_bit = load[i];
+        registers_[i].Update(in_bit, load_bit);
+    }
+}

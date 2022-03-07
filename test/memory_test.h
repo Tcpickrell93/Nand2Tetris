@@ -8,18 +8,28 @@ class MemoryTest: public ::testing::Test {
     protected:
         DataFlipFLop dff = DataFlipFLop();
         RegisterBit rb = RegisterBit();
-
-        const bit in_1 = { 0b1u };
-        const bit in_0 = { 0b0u };
         
-        const bit load_1 = { 0b1u };
-        const bit load_0 = { 0b0u };
+        const bit in_1 { 0b1u };
+        const bit in_0 { 0b0u };
+
+        const bit load_1 { 0b1u };
+        const bit load_0 { 0b0u };
+
+        Register16 r16 = Register16();
+
+        const byte2 in16_1s { 0b1111'1111'1111'1111u };
+        const byte2 in16_0s { 0b0000'0000'0000'0000u };
+        const byte2 in16_rand { 0b1101'0100'0110'1110u };
+
+        const byte2 load16_1s { 0b1111'1111'1111'1111u };
+        const byte2 load16_0s { 0b0000'0000'0000'0000u };
+        const byte2 load16_rand { 0b0100'1111'1010'0001u };
 };
 
 TEST_F(MemoryTest, DataFlipFLop_test) {
     // initial parameter values
-    bit result{ dff.Out() };
-    bit expected{ 0b0u };
+    bit result { dff.Out() };
+    bit expected { 0b0u };
     ASSERT_EQ(result, expected);
 
     // update bit
@@ -31,8 +41,8 @@ TEST_F(MemoryTest, DataFlipFLop_test) {
 
 TEST_F(MemoryTest, RegisterBit_test) {
     // initial parameter values
-    bit result{ rb.Out() };
-    bit expected{ 0b0u };
+    bit result { rb.Out() };
+    bit expected { 0b0u };
     ASSERT_EQ(result, expected);
     
     // in = 1, load = 1
@@ -54,42 +64,33 @@ TEST_F(MemoryTest, RegisterBit_test) {
     ASSERT_EQ(result, expected);
 }
 
-/*
-TEST_F(MemoryTest, Register16) {
-    // in=0000'0000'0000'0000, load=0
-    //std::cout << "a: " << a << ", load: " << load << ", prev_out: " << prev_out << std::endl; 
-    byte2 result{ Register16(in16, load, prev_out16, prev_in16) };
-    byte2 expected{ 0b0000'0000'0000'0000u };
-    ASSERT_EQ(result, expected);
-    
-    // change in to 1
-    // output should not change - load not active
-    a.set();
-    //std::cout << "a: " << a << ", load: " << load << ", prev_out: " << prev_out << std::endl; 
-    result = RegisterBit(in16, load, prev_out16, prev_in16);
-    byte2 expected{ 0b0000'0000'0000'0000u };
+TEST_F(MemoryTest, Register16_test) {
+    // initial parameter values
+    byte2 result { r16.Out() };
+    byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
 
-    // change load to 1
-    // output should have changed - looks at prev load
-    load.set();
-    //std::cout << "a: " << a << ", load: " << load << ", prev_out: " << prev_out << std::endl; 
-    result = RegisterBit(in16, load, prev_out16, prev_in16);
-    byte2 expected{ 0b0000'0000'0000'0000u };
-    ASSERT_EQ(result, expected);
-    
-    // don't change anything
-    // output should be 1 since load and prev in were both 1
-    //std::cout << "a: " << a << ", load: " << load << ", prev_out: " << prev_out << std::endl; 
-    result = RegisterBit(in16, load, prev_out16, prev_in16);
-    byte2 expected{ 0b0000'0000'0000'0000u };
+    // in = 1s, load = 1s
+    r16.Update(in16_1s, load16_1s);
+    result = r16.Out();
+    expected = 0b1111'1111'1111'1111u;
     ASSERT_EQ(result, expected);
 
-    // don't change anything
-    // should maintain 1
-    //std::cout << "a: " << a << ", load: " << load << ", prev_out: " << prev_out << std::endl; 
-    result = RegisterBit(in16, load, prev_out16, prev_in16);
-    byte2 expected{ 0b0000'0000'0000'0000u };
+    // in = 0s, load = 0s
+    r16.Update(in16_0s, load16_0s);
+    result = r16.Out();
+    expected = 0b1111'1111'1111'1111u;
+    ASSERT_EQ(result, expected);
+
+    // in = 0s, load = 1s
+    r16.Update(in16_0s, load16_1s);
+    result = r16.Out();
+    expected = 0b0000'0000'0000'0000u;
+    ASSERT_EQ(result, expected);
+
+    // in = rand, load = rand
+    r16.Update(in16_rand, load16_rand);
+    result = r16.Out();
+    expected = 0b0100'0100'0010'0000u;
     ASSERT_EQ(result, expected);
 }
-*/
