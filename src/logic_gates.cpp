@@ -104,10 +104,14 @@ byte2 Mux8Way16(const byte2& a, const byte2& b,
                 const byte2& g, const byte2& h, const bit3& sel) {
     /* 16-bit 8-Way Multiplexor */
     return Mux16(
-            Mux16(Mux16(a, b, sel[0]), Mux16(c, d, sel[0]), sel[1]),
-            Mux16(Mux16(e, f, sel[0]), Mux16(g, h, sel[0]), sel[1]),
-            sel[2]
-            );
+        Mux16(Mux16(a, b, sel[0]), 
+              Mux16(c, d, sel[0]), 
+              sel[1]),
+        Mux16(Mux16(e, f, sel[0]), 
+              Mux16(g, h, sel[0]), 
+              sel[1]),
+        sel[2]
+    );
 }
 
 bit4 DMux4Way(const bit& a, const bit2& sel) {
