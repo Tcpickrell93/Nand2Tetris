@@ -19,6 +19,9 @@ class MemoryTest: public ::testing::Test {
 
         const byte2 in16_1s { 0b1111'1111'1111'1111u };
         const byte2 in16_0s { 0b0000'0000'0000'0000u };
+
+        RAM8 ram8 = RAM8();
+
 };
 
 TEST_F(MemoryTest, DataFlipFLop_test) {
@@ -81,5 +84,61 @@ TEST_F(MemoryTest, Register16_test) {
     r16.Update(in16_0s, load_1);
     result = r16.Out();
     expected = 0b0000'0000'0000'0000u;
+    ASSERT_EQ(result, expected);
+}
+
+TEST_F(MemoryTest, RAM8_test) {
+    // initial parameter values
+    byte2 result { ram8.Read(0b000u) };
+    byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b001u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b010u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b011u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b100u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b101u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b110u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b111u);
+    ASSERT_EQ(result, expected);
+
+    bit3 address { 0b100u };
+    ram8.Write(address, in16_1s, load_1);
+
+    result = ram8.Read(0b000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b001u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b010u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b011u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b101u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b110u);
+    ASSERT_EQ(result, expected);
+
+    result = ram8.Read(0b111u);
+    ASSERT_EQ(result, expected);
+
+    expected = 0b1111'1111'1111'1111u;
+    result = ram8.Read(0b100u);
     ASSERT_EQ(result, expected);
 }
