@@ -68,21 +68,64 @@ byte2 RAM8::Read(const bit3& address) {
 }
 
 void RAM8::Write(const bit3& address, const byte2& in, const bit& load) {
-    if (address == 0b000) {
+    if (address == 0b000u) {
         reg0_.Update(in, load);
-    } else if (address == 0b001) {
+    } else if (address == 0b001u) {
         reg1_.Update(in, load);
-    } else if (address == 0b010) {
+    } else if (address == 0b010u) {
         reg2_.Update(in, load);
-    } else if (address == 0b011) {
+    } else if (address == 0b011u) {
         reg3_.Update(in, load);
-    } else if (address == 0b100) {
+    } else if (address == 0b100u) {
         reg4_.Update(in, load);
-    } else if (address == 0b101) {
+    } else if (address == 0b101u) {
         reg5_.Update(in, load);
-    } else if (address == 0b110) {
+    } else if (address == 0b110u) {
         reg6_.Update(in, load);
-    } else if (address == 0b111) {
+    } else if (address == 0b111u) {
         reg7_.Update(in, load);
+    }
+}
+
+byte2 RAM64::Read(const bit6& address)
+{
+    bit3 ram8_address {};
+    ram8_address[0] = address[0];
+    ram8_address[1] = address[1];
+    ram8_address[2] = address[2];
+    bit3 reg16_address {};
+    reg16_address[0] = address[3];
+    reg16_address[1] = address[4];
+    reg16_address[2] = address[5];
+    return Mux8Way16(ram8_0_.Read(reg16_address), ram8_1_.Read(reg16_address), ram8_2_.Read(reg16_address), 
+                     ram8_3_.Read(reg16_address), ram8_4_.Read(reg16_address), ram8_5_.Read(reg16_address), 
+                     ram8_6_.Read(reg16_address), ram8_7_.Read(reg16_address), ram8_address);
+}
+
+void RAM64::Write(const bit6& address, const byte2& in, const bit& load) {
+    bit3 ram8_address {};
+    ram8_address[0] = address[0];
+    ram8_address[1] = address[1];
+    ram8_address[2] = address[2];
+    bit3 reg16_address {};
+    reg16_address[0] = address[3];
+    reg16_address[1] = address[4];
+    reg16_address[2] = address[5];
+    if (ram8_address == 0b000u) {
+        ram8_0_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b001u) {
+        ram8_1_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b010u) {
+        ram8_2_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b011u) {
+        ram8_3_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b100u) {
+        ram8_4_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b101u) {
+        ram8_5_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b110u) {
+        ram8_6_.Write(reg16_address, in, load);
+    } else if (ram8_address == 0b111u) {
+        ram8_7_.Write(reg16_address, in, load);
     }
 }
