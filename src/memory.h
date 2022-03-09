@@ -62,5 +62,21 @@ private:
     Register16 reg7_ {};
 };
 
+class RAM64 {
+public:
+    byte2 Read(const bit6& address);
+    void Write(const bit6& address, const byte2& in, const bit& load);
+
+private:
+    RAM8 ram8_0_ {};
+    RAM8 ram8_1_ {};
+    RAM8 ram8_2_ {};
+    RAM8 ram8_3_ {};
+    RAM8 ram8_4_ {};
+    RAM8 ram8_5_ {};
+    RAM8 ram8_6_ {};
+    RAM8 ram8_7_ {};
+};
+
 #endif // MEMORY_H
 
