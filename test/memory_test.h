@@ -21,7 +21,10 @@ class MemoryTest: public ::testing::Test {
         const byte2 in16_0s { 0b0000'0000'0000'0000u };
 
         RAM8 ram8 = RAM8();
-
+        RAM64 ram64 = RAM64();
+        RAM512 ram512 = RAM512();
+        RAM4k ram4k = RAM4k();
+        RAM16k ram16k = RAM16k();
 };
 
 TEST_F(MemoryTest, DataFlipFLop_test) {
@@ -140,5 +143,205 @@ TEST_F(MemoryTest, RAM8_test) {
 
     expected = 0b1111'1111'1111'1111u;
     result = ram8.Read(0b100u);
+    ASSERT_EQ(result, expected);
+}
+
+TEST_F(MemoryTest, RAM64_test) {
+    // initial parameter values
+    byte2 result { ram64.Read(0b000'000u) };
+    byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b001'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b010'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b011'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b100'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b101'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b110'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b111'000u);
+    ASSERT_EQ(result, expected);
+
+    bit6 address { 0b100'000u };
+    ram64.Write(address, in16_1s, load_1);
+
+    result = ram64.Read(0b000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b001'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b010'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b011'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b101'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b110'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram64.Read(0b111'000u);
+    ASSERT_EQ(result, expected);
+
+    expected = 0b1111'1111'1111'1111u;
+    result = ram64.Read(0b100'000u);
+    ASSERT_EQ(result, expected);
+}
+
+TEST_F(MemoryTest, RAM512_test) {
+    // initial parameter values
+    byte2 result { ram512.Read(0b000'000'000u) };
+    byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b001'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b010'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b011'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b100'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b101'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b110'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b111'000'000u);
+    ASSERT_EQ(result, expected);
+
+    bit9 address { 0b100'000'000u };
+    ram512.Write(address, in16_1s, load_1);
+
+    result = ram512.Read(0b000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b001'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b010'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b011'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b101'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b110'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram512.Read(0b111'000'000u);
+    ASSERT_EQ(result, expected);
+
+    expected = 0b1111'1111'1111'1111u;
+    result = ram512.Read(0b100'000'000u);
+    ASSERT_EQ(result, expected);
+}
+
+TEST_F(MemoryTest, RAM4k_test) {
+    // initial parameter values
+    byte2 result { ram4k.Read(0b000'000'000'000u) };
+    byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b001'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b010'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b011'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b100'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b101'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b110'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b111'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    bit12 address { 0b100'000'000'000u };
+    ram4k.Write(address, in16_1s, load_1);
+
+    result = ram4k.Read(0b000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b001'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b010'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b011'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b101'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b110'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram4k.Read(0b111'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    expected = 0b1111'1111'1111'1111u;
+    result = ram4k.Read(0b100'000'000'000u);
+    ASSERT_EQ(result, expected);
+}
+
+TEST_F(MemoryTest, RAM16k_test) {
+    // initial parameter values
+    byte2 result { ram16k.Read(0b00'000'000'000'000u) };
+    byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+
+    result = ram16k.Read(0b01'000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram16k.Read(0b10'000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram16k.Read(0b11'000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    bit14 address { 0b10'000'000'000'000u };
+    ram16k.Write(address, in16_1s, load_1);
+
+    result = ram16k.Read(0b000'000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram16k.Read(0b001'000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    result = ram16k.Read(0b011'000'000'000'000u);
+    ASSERT_EQ(result, expected);
+
+    expected = 0b1111'1111'1111'1111u;
+    result = ram16k.Read(0b10'000'000'000'000u);
     ASSERT_EQ(result, expected);
 }
