@@ -2,7 +2,6 @@
 #define MEMORY_H
 
 #include "bits.h"
-#include <vector>
 
 class DataFlipFLop {
 public:
