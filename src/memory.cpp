@@ -21,6 +21,13 @@ void RegisterBit::Update(const bit& in, const bit& load) {
     dff_.Update(mux_out);
 }
 
+Register16::Register16() {}
+
+Register16::Register16(const byte2& value) {
+    bit load { 0b1u };
+    Update(value, load);
+}
+
 byte2 Register16::Out() {
     byte2 result {};
     result[0] = bit0_.Out()[0];

@@ -23,6 +23,8 @@ private:
 
 class Register16 {
 public:
+    Register16();
+    Register16(const byte2& value);
     void Update(const byte2& in, const bit& load);
     byte2 Out();
 
