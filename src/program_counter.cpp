@@ -3,7 +3,11 @@
 #include "logic_gates.h"
 
 
-byte2 ProgramCounter::Update(const byte2& in, const bit& load, const bit& increment, const bit& reset) {
+byte2 ProgramCounter::Update(const byte2& in, 
+                             const bit& load, 
+                             const bit& increment, 
+                             const bit& reset) 
+{
     reg_.Update(
         Mux16(Mux16(Mux16(reg_.Out(),
                           Inc16(reg_.Out()),
