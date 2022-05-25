@@ -29,14 +29,14 @@ TEST_F(CPUTest, A_instruction_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to the A-instruction
+    // Make sure register A is set to the A-instruction
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0111'1111'1111'1111u };
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_0_test) {
-    // Set A register to non-zero
+    // Set register A to non-zero
     byte2 a_instruction { 0b0111'1111'1111'1111u };
     cpu.Update(inM_0s,
                a_instruction,
@@ -44,7 +44,7 @@ TEST_F(CPUTest, C_0_test) {
                outM,
                writeM,
                addressM);
-    // Update CPU to set A register to 0
+    // Update CPU to set register A to 0
     byte2 instruction { C_0|D_A };
     cpu.Update(inM_0s,
                instruction,
@@ -52,14 +52,14 @@ TEST_F(CPUTest, C_0_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 0
+    // Make sure register A is set to 0
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_1_test) {
-    // Update CPU to set A register to 1
+    // Update CPU to set register A to 1
     byte2 instruction { C_1|D_A };
     cpu.Update(inM_0s,
                instruction,
@@ -67,11 +67,11 @@ TEST_F(CPUTest, C_1_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 1
+    // Make sure register A is set to 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0001u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is not 1
+    // Make sure register D is not 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0000u;
     ASSERT_EQ(result, expected);
@@ -82,7 +82,7 @@ TEST_F(CPUTest, C_1_test) {
 }
 
 TEST_F(CPUTest, D_NULL_test) {
-    // Update CPU to set Null register to 1
+    // Update CPU to set Null to 1
     byte2 instruction { C_1|D_NULL };
     cpu.Update(inM_0s,
                instruction,
@@ -90,11 +90,11 @@ TEST_F(CPUTest, D_NULL_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is not 1
+    // Make sure register A is not 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is not 1
+    // Make sure register D is not 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0000u;
     ASSERT_EQ(result, expected);
@@ -113,11 +113,11 @@ TEST_F(CPUTest, D_M_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is not 1
+    // Make sure register A is not 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is not 1
+    // Make sure register D is not 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0000u;
     ASSERT_EQ(result, expected);
@@ -132,7 +132,7 @@ TEST_F(CPUTest, D_M_test) {
 }
 
 TEST_F(CPUTest, D_D_test) {
-    // Update CPU to set D register to 1
+    // Update CPU to set register D to 1
     byte2 instruction { C_1|D_D };
     cpu.Update(inM_0s,
                instruction,
@@ -140,11 +140,11 @@ TEST_F(CPUTest, D_D_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is not 1
+    // Make sure register A is not 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is set to 1
+    // Make sure register D is set to 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0001u;
     ASSERT_EQ(result, expected);
@@ -155,7 +155,7 @@ TEST_F(CPUTest, D_D_test) {
 }
 
 TEST_F(CPUTest, D_DM_test) {
-    // Update CPU to set D register and M value to 1
+    // Update CPU to set register D and M value to 1
     byte2 instruction { C_1|D_DM };
     cpu.Update(inM_0s,
                instruction,
@@ -163,11 +163,11 @@ TEST_F(CPUTest, D_DM_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is not 1
+    // Make sure register A is not 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is set to 1
+    // Make sure register D is set to 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0001u;
     ASSERT_EQ(result, expected);
@@ -182,7 +182,7 @@ TEST_F(CPUTest, D_DM_test) {
 }
 
 TEST_F(CPUTest, D_AM_test) {
-    // Update CPU to set A register and M value to 1
+    // Update CPU to set register A and M value to 1
     byte2 instruction { C_1|D_AM };
     cpu.Update(inM_0s,
                instruction,
@@ -190,11 +190,11 @@ TEST_F(CPUTest, D_AM_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 1
+    // Make sure register A is set to 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0001u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is not 1
+    // Make sure register D is not 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0000u;
     ASSERT_EQ(result, expected);
@@ -209,7 +209,7 @@ TEST_F(CPUTest, D_AM_test) {
 }
 
 TEST_F(CPUTest, D_AD_test) {
-    // Update CPU to set A register and D register to 1
+    // Update CPU to set register A and register D to 1
     byte2 instruction { C_1|D_AD };
     cpu.Update(inM_0s,
                instruction,
@@ -217,11 +217,11 @@ TEST_F(CPUTest, D_AD_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 1
+    // Make sure register A is set to 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0001u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is set to 1
+    // Make sure register D is set to 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0001u;
     ASSERT_EQ(result, expected);
@@ -232,7 +232,7 @@ TEST_F(CPUTest, D_AD_test) {
 }
 
 TEST_F(CPUTest, D_ADM_test) {
-    // Update CPU to set A register, D register, and M value to 1
+    // Update CPU to set register A, register D, and M value to 1
     byte2 instruction { C_1|D_ADM };
     cpu.Update(inM_0s,
                instruction,
@@ -240,11 +240,11 @@ TEST_F(CPUTest, D_ADM_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 1
+    // Make sure register A is set to 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0001u };
     ASSERT_EQ(result, expected);
-    // Make sure D register is set to 1
+    // Make sure register D is set to 1
     result = cpu.Get_reg_D();
     expected = 0b0000'0000'0000'0001u;
     ASSERT_EQ(result, expected);
@@ -259,7 +259,7 @@ TEST_F(CPUTest, D_ADM_test) {
 }
 
 TEST_F(CPUTest, C_NEG_1_test) {
-    // Update CPU to set A register to -1
+    // Update CPU to set register A to -1
     byte2 instruction { C_NEG_1|D_A };
     cpu.Update(inM_0s,
                instruction,
@@ -267,14 +267,14 @@ TEST_F(CPUTest, C_NEG_1_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 1
+    // Make sure register A is set to 1
     byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b1111'1111'1111'1111u };
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_D_test) {
-    // Update CPU to set A register to -1
+    // Update CPU to set register A to -1
     byte2 instruction { C_NEG_1|D_A };
     cpu.Update(inM_0s,
                instruction,
@@ -282,7 +282,7 @@ TEST_F(CPUTest, C_D_test) {
                outM,
                writeM,
                addressM);
-    // Update CPU to set A register to D
+    // Update CPU to set register A to register D
     instruction = C_D|D_A;
     cpu.Update(inM_0s,
                instruction,
@@ -290,58 +290,267 @@ TEST_F(CPUTest, C_D_test) {
                outM,
                writeM,
                addressM);
-    // Make sure A register is set to 1
-    byte2 result { cpu.Get_reg_D() };
+    // Make sure register A is set to 0
+    byte2 result { cpu.Get_reg_A() };
     byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+    // Make sure register D is still 0
+    result = cpu.Get_reg_D() ;
+    expected = 0b0000'0000'0000'0000u;
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_A_test) {
-    
+    // Update CPU to set register A to -1
+    byte2 instruction { C_NEG_1|D_A };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register D to register A
+    instruction = C_A|D_D;
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Make sure register D is set to -1
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
+    // Make sure register A is still -1
+    result = cpu.Get_reg_A() ;
+    expected = 0b1111'1111'1111'1111u;
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_NOT_D_test) {
-    
+    // Update CPU to set register A to not register D
+    byte2 instruction { C_NOT_D|D_A };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_A() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_NOT_A_test) {
-    
+    // Update CPU to set register D to not register A
+    byte2 instruction { C_NOT_A|D_D };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_NEG_D_test) {
-    
+    // Update CPU to set register D to 1
+    byte2 instruction { C_1|D_D };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register A to negative register D
+    instruction = C_NEG_D|D_A;
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_A() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_NEG_A_test) {
-    
+    // Update CPU to set register A to 1
+    byte2 instruction { C_1|D_A };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register D to negative register A
+    instruction = C_NEG_A|D_D;
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_D_PLUS_1_test) {
-    
+    // Update CPU to set register A to register D plus 1
+    byte2 instruction { C_D_PLUS_1|D_A };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_A() };
+    byte2 expected { 0b0000'0000'0000'0001u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_A_PLUS_1_test) {
-    
+    // Update CPU to set register D to register A plus 1
+    byte2 instruction { C_A_PLUS_1|D_D };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b0000'0000'0000'0001u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_D_MINUS_1_test) {
-    
+    // Update CPU to set register A to register D minus 1
+    byte2 instruction { C_D_MINUS_1|D_A };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_A() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_A_MINUS_1_test) {
-    
+    // Update CPU to set register D to register A minus 1
+    byte2 instruction { C_A_MINUS_1|D_D };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b1111'1111'1111'1111u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_D_PLUS_A_test) {
-    
+    // Update CPU to set register A and register D to 1
+    byte2 instruction { C_1|D_AD };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register A to register D plus register A
+    instruction = C_D_PLUS_A|D_A;
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_A() };
+    byte2 expected { 0b0000'0000'0000'0010u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_D_MINUS_A_test) {
-    
+    // Update CPU to set register A to 8
+    byte2 a_instruction { 0b0000'0000'0000'1000u };
+    cpu.Update(inM_0s,
+               a_instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register D to register A
+    byte2 instruction { C_A|D_D };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register A to 3
+    a_instruction = 0b0000'0000'0000'0011u;
+    cpu.Update(inM_0s,
+               a_instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register D to register D minus register A
+    instruction = C_D_MINUS_A|D_D;
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b0000'0000'0000'0101u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_A_MINUS_D_test) {
-    
+    // Update CPU to set register A to 3
+    byte2 a_instruction { 0b0000'0000'0000'0011u };
+    cpu.Update(inM_0s,
+               a_instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register D to register A
+    byte2 instruction { C_A|D_D };
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register A to 8
+    a_instruction = 0b0000'0000'0000'1000u;
+    cpu.Update(inM_0s,
+               a_instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    // Update CPU to set register D to register D minus register A
+    instruction = C_A_MINUS_D|D_D;
+    cpu.Update(inM_0s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_D() };
+    byte2 expected { 0b0000'0000'0000'0101u };
+    ASSERT_EQ(result, expected);
 }
 
 TEST_F(CPUTest, C_D_AND_A_test) {
