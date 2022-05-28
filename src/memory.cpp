@@ -241,7 +241,7 @@ void RAM4k::Write(const bit12& address, const byte2& in, const bit& load) {
     }
 }
 
-byte2 RAM16k::Read(const bit14& address)
+byte2 RAM16k::Read(const byte2& address)
 {
     bit2 ram4k_address {};
     ram4k_address[0] = address[0];
@@ -263,7 +263,7 @@ byte2 RAM16k::Read(const bit14& address)
                      ram4k_2_.Read(ram512_address), ram4k_3_.Read(ram512_address), ram4k_address);
 }
 
-void RAM16k::Write(const bit14& address, const byte2& in, const bit& load) {
+void RAM16k::Write(const byte2& address, const byte2& in, const bit& load) {
     bit2 ram4k_address {};
     ram4k_address[0] = address[0];
     ram4k_address[1] = address[1];

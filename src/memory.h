@@ -113,8 +113,8 @@ private:
 
 class RAM16k {
 public:
-    byte2 Read(const bit14& address);
-    void Write(const bit14& address, const byte2& in, const bit& load);
+    byte2 Read(const byte2& address);
+    void Write(const byte2& address, const byte2& in, const bit& load);
 
 private:
     RAM4k ram4k_0_ {};
