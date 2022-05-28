@@ -23,31 +23,36 @@ class ProgramCounterTest: public ::testing::Test {
 
 TEST_F(ProgramCounterTest, increment_test) {
     // initial parameter values
-    byte2 result { counter.Update(in16_1s, load_0, increment_0, reset_0) };
+    counter.Update(in16_1s, load_0, increment_0, reset_0);
+    byte2 result { counter.Out() };
     byte2 expected { 0b0000'0000'0000'0000u };
     ASSERT_EQ(result, expected);
 
     // increment the counter
-    result = counter.Update(in16_0s, load_0, increment_1, reset_0);
+    counter.Update(in16_0s, load_0, increment_1, reset_0);
+    result = counter.Out();
     expected = 0b0000'0000'0000'0001u; 
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(ProgramCounterTest, reset_test) {
     // increment the counter
-    byte2 result { counter.Update(in16_0s, load_0, increment_1, reset_0) };
+    counter.Update(in16_0s, load_0, increment_1, reset_0);
+    byte2 result { counter.Out() };
     // make sure value is non-zero
     byte2 expected { 0b0000'0000'0000'0001u }; 
     ASSERT_EQ(result, expected);
     // reset the counter
-    result = counter.Update(in16_1s, load_0, increment_0, reset_1);
+    counter.Update(in16_1s, load_0, increment_0, reset_1);
+    result = counter.Out();
     expected = 0b0000'0000'0000'0000u; 
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(ProgramCounterTest, load_test) {
     // load value into counter
-    byte2 result { counter.Update(in16_1s, load_1, increment_0, reset_0) };
+    counter.Update(in16_1s, load_1, increment_0, reset_0);
+    byte2 result { counter.Out() };
     byte2 expected { 0b1111'1111'1111'1111u };
     ASSERT_EQ(result, expected);
 }
