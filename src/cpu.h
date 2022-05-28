@@ -15,6 +15,7 @@ public:
                byte2& addressM);            // address in which we want to write to memory
    byte2 Get_reg_A();
    byte2 Get_reg_D();
+   byte2 Get_pc();
 
 private:
    bit Jump(const bit& j1,

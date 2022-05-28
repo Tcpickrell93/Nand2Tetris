@@ -73,11 +73,16 @@ void CPU::Update(const byte2& inM,
     // else, write to memory if instruction[3] == 1
     writeM = Mux(0, instruction[3], instruction[15]);
 
-    bit load = Jump(instruction[2],
-                    instruction[1],
-                    instruction[0],
-                    zr,
-                    ng);
+    // if instruction[15] == 0, do not jump
+    // else, determine if jump is required
+    bit load = Mux(0,
+                   Jump(instruction[2],
+                        instruction[1],
+                        instruction[0],
+                        zr,
+                        ng),
+                   instruction[15]);
+
     bit increment = Not(Or(load, reset));
     // address of the next instruction
     pc_.Update(reg_A_.Out(),
@@ -95,4 +100,8 @@ byte2 CPU::Get_reg_A() {
 
 byte2 CPU::Get_reg_D() {
     return reg_D_.Out();
+}
+
+byte2 CPU::Get_pc() {
+    return pc_.Out();
 }
