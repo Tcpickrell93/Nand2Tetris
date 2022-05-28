@@ -5,8 +5,9 @@
 
 class ProgramCounter {
 public:
-    byte2 Update(const byte2& in, const bit& load, const bit& increment, const bit& reset);
-
+    void Update(const byte2& in, const bit& load, const bit& increment, const bit& reset);
+    byte2 Out();
+    
 private:
     Register16 reg_ {};
 };
