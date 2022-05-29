@@ -3,6 +3,7 @@
 #include "memory_test.h"
 #include "program_counter_test.h"
 #include "cpu_test.h"
+#include "computer_test.h"
 
 #include <gtest/gtest.h>
 
