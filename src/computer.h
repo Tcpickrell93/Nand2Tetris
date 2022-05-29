@@ -1,14 +1,18 @@
 #ifndef COMPUTER_H
 #define COMPUTER_H
 
+#include <vector>
+
 #include "memory.h"
 #include "cpu.h"
-#include "add.h"
 
 class Computer {
 public:
-    void Load_Program(byte2 program_instructions[]);
+    void Load_Program(const std::vector<byte2> program_instructions);
     void Run_Program();
+    void Reset();
+    RAM16k Get_data_mem();
+    RAM16k Get_instruction_mem();
 
 private:
     CPU cpu_ {};
