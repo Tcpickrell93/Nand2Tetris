@@ -8,9 +8,6 @@
 class CPUTest: public ::testing::Test {
     protected:
         CPU cpu = CPU();
-        //RAM8 instruction_mem = RAM8();
-        //RAM8 data_mem = RAM8();
-        
         const byte2 inM_1s { 0b1111'1111'1111'1111u };
         const byte2 inM_0s { 0b0000'0000'0000'0000u };
         const bit reset_1 { 0b1u };
