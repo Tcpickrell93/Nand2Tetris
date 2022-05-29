@@ -96,28 +96,34 @@ void RAM8::Write(const bit3& address, const byte2& in, const bit& load) {
 
 byte2 RAM64::Read(const bit6& address)
 {
-    bit3 ram8_address {};
-    ram8_address[0] = address[0];
-    ram8_address[1] = address[1];
-    ram8_address[2] = address[2];
     bit3 reg16_address {};
-    reg16_address[0] = address[3];
-    reg16_address[1] = address[4];
-    reg16_address[2] = address[5];
-    return Mux8Way16(ram8_0_.Read(reg16_address), ram8_1_.Read(reg16_address), ram8_2_.Read(reg16_address), 
-                     ram8_3_.Read(reg16_address), ram8_4_.Read(reg16_address), ram8_5_.Read(reg16_address), 
-                     ram8_6_.Read(reg16_address), ram8_7_.Read(reg16_address), ram8_address);
+    reg16_address[0] = address[0];
+    reg16_address[1] = address[1];
+    reg16_address[2] = address[2];
+    bit3 ram8_address {};
+    ram8_address[0] = address[3];
+    ram8_address[1] = address[4];
+    ram8_address[2] = address[5];
+    return Mux8Way16(ram8_0_.Read(reg16_address), 
+                     ram8_1_.Read(reg16_address), 
+                     ram8_2_.Read(reg16_address), 
+                     ram8_3_.Read(reg16_address), 
+                     ram8_4_.Read(reg16_address), 
+                     ram8_5_.Read(reg16_address), 
+                     ram8_6_.Read(reg16_address), 
+                     ram8_7_.Read(reg16_address), 
+                     ram8_address);
 }
 
 void RAM64::Write(const bit6& address, const byte2& in, const bit& load) {
-    bit3 ram8_address {};
-    ram8_address[0] = address[0];
-    ram8_address[1] = address[1];
-    ram8_address[2] = address[2];
     bit3 reg16_address {};
-    reg16_address[0] = address[3];
-    reg16_address[1] = address[4];
-    reg16_address[2] = address[5];
+    reg16_address[0] = address[0];
+    reg16_address[1] = address[1];
+    reg16_address[2] = address[2];
+    bit3 ram8_address {};
+    ram8_address[0] = address[3];
+    ram8_address[1] = address[4];
+    ram8_address[2] = address[5];
     if (ram8_address == 0b000u) {
         ram8_0_.Write(reg16_address, in, load);
     } else if (ram8_address == 0b001u) {
@@ -139,34 +145,34 @@ void RAM64::Write(const bit6& address, const byte2& in, const bit& load) {
 
 byte2 RAM512::Read(const bit9& address)
 {
-    bit3 ram64_address {};
-    ram64_address[0] = address[0];
-    ram64_address[1] = address[1];
-    ram64_address[2] = address[2];
     bit6 ram8_address {};
-    ram8_address[0] = address[3];
-    ram8_address[1] = address[4];
-    ram8_address[2] = address[5];
-    ram8_address[3] = address[6];
-    ram8_address[4] = address[7];
-    ram8_address[5] = address[8];
+    ram8_address[0] = address[0];
+    ram8_address[1] = address[1];
+    ram8_address[2] = address[2];
+    ram8_address[3] = address[3];
+    ram8_address[4] = address[4];
+    ram8_address[5] = address[5];
+    bit3 ram64_address {};
+    ram64_address[0] = address[6];
+    ram64_address[1] = address[7];
+    ram64_address[2] = address[8];
     return Mux8Way16(ram64_0_.Read(ram8_address), ram64_1_.Read(ram8_address), ram64_2_.Read(ram8_address), 
                      ram64_3_.Read(ram8_address), ram64_4_.Read(ram8_address), ram64_5_.Read(ram8_address), 
                      ram64_6_.Read(ram8_address), ram64_7_.Read(ram8_address), ram64_address);
 }
 
 void RAM512::Write(const bit9& address, const byte2& in, const bit& load) {
-    bit3 ram64_address {};
-    ram64_address[0] = address[0];
-    ram64_address[1] = address[1];
-    ram64_address[2] = address[2];
     bit6 ram8_address {};
-    ram8_address[0] = address[3];
-    ram8_address[1] = address[4];
-    ram8_address[2] = address[5];
-    ram8_address[3] = address[6];
-    ram8_address[4] = address[7];
-    ram8_address[5] = address[8];
+    ram8_address[0] = address[0];
+    ram8_address[1] = address[1];
+    ram8_address[2] = address[2];
+    ram8_address[3] = address[3];
+    ram8_address[4] = address[4];
+    ram8_address[5] = address[5];
+    bit3 ram64_address {};
+    ram64_address[0] = address[6];
+    ram64_address[1] = address[7];
+    ram64_address[2] = address[8];
     if (ram64_address == 0b000u) {
         ram64_0_.Write(ram8_address, in, load);
     } else if (ram64_address == 0b001u) {
@@ -188,40 +194,40 @@ void RAM512::Write(const bit9& address, const byte2& in, const bit& load) {
 
 byte2 RAM4k::Read(const bit12& address)
 {
-    bit3 ram512_address {};
-    ram512_address[0] = address[0];
-    ram512_address[1] = address[1];
-    ram512_address[2] = address[2];
     bit9 ram64_address {};
-    ram64_address[0] = address[3];
-    ram64_address[1] = address[4];
-    ram64_address[2] = address[5];
-    ram64_address[3] = address[6];
-    ram64_address[4] = address[7];
-    ram64_address[5] = address[8];
-    ram64_address[6] = address[9];
-    ram64_address[7] = address[10];
-    ram64_address[8] = address[11];
+    ram64_address[0] = address[0];
+    ram64_address[1] = address[1];
+    ram64_address[2] = address[2];
+    ram64_address[3] = address[3];
+    ram64_address[4] = address[4];
+    ram64_address[5] = address[5];
+    ram64_address[6] = address[6];
+    ram64_address[7] = address[7];
+    ram64_address[8] = address[8];
+    bit3 ram512_address {};
+    ram512_address[0] = address[9];
+    ram512_address[1] = address[10];
+    ram512_address[2] = address[11];
     return Mux8Way16(ram512_0_.Read(ram64_address), ram512_1_.Read(ram64_address), ram512_2_.Read(ram64_address), 
                      ram512_3_.Read(ram64_address), ram512_4_.Read(ram64_address), ram512_5_.Read(ram64_address), 
                      ram512_6_.Read(ram64_address), ram512_7_.Read(ram64_address), ram512_address);
 }
 
 void RAM4k::Write(const bit12& address, const byte2& in, const bit& load) {
-    bit3 ram512_address {};
-    ram512_address[0] = address[0];
-    ram512_address[1] = address[1];
-    ram512_address[2] = address[2];
     bit9 ram64_address {};
-    ram64_address[0] = address[3];
-    ram64_address[1] = address[4];
-    ram64_address[2] = address[5];
-    ram64_address[3] = address[6];
-    ram64_address[4] = address[7];
-    ram64_address[5] = address[8];
-    ram64_address[6] = address[9];
-    ram64_address[7] = address[10];
-    ram64_address[8] = address[11];
+    ram64_address[0] = address[0];
+    ram64_address[1] = address[1];
+    ram64_address[2] = address[2];
+    ram64_address[3] = address[3];
+    ram64_address[4] = address[4];
+    ram64_address[5] = address[5];
+    ram64_address[6] = address[6];
+    ram64_address[7] = address[7];
+    ram64_address[8] = address[8];
+    bit3 ram512_address {};
+    ram512_address[0] = address[9];
+    ram512_address[1] = address[10];
+    ram512_address[2] = address[11];
     if (ram512_address == 0b000u) {
         ram512_0_.Write(ram64_address, in, load);
     } else if (ram512_address == 0b001u) {
@@ -243,43 +249,43 @@ void RAM4k::Write(const bit12& address, const byte2& in, const bit& load) {
 
 byte2 RAM16k::Read(const byte2& address)
 {
-    bit2 ram4k_address {};
-    ram4k_address[0] = address[0];
-    ram4k_address[1] = address[1];
     bit12 ram512_address {};
-    ram512_address[0] = address[3];
-    ram512_address[1] = address[4];
-    ram512_address[2] = address[5];
-    ram512_address[3] = address[6];
-    ram512_address[4] = address[7];
-    ram512_address[5] = address[8];
-    ram512_address[6] = address[9];
-    ram512_address[7] = address[10];
-    ram512_address[8] = address[11];
-    ram512_address[9] = address[12];
-    ram512_address[10] = address[13];
-    ram512_address[11] = address[14];
+    ram512_address[0] = address[0];
+    ram512_address[1] = address[1];
+    ram512_address[2] = address[2];
+    ram512_address[3] = address[3];
+    ram512_address[4] = address[4];
+    ram512_address[5] = address[5];
+    ram512_address[6] = address[6];
+    ram512_address[7] = address[7];
+    ram512_address[8] = address[8];
+    ram512_address[9] = address[9];
+    ram512_address[10] = address[10];
+    ram512_address[11] = address[11];
+    bit2 ram4k_address {};
+    ram4k_address[0] = address[12];
+    ram4k_address[1] = address[13];
     return Mux4Way16(ram4k_0_.Read(ram512_address), ram4k_1_.Read(ram512_address),
                      ram4k_2_.Read(ram512_address), ram4k_3_.Read(ram512_address), ram4k_address);
 }
 
 void RAM16k::Write(const byte2& address, const byte2& in, const bit& load) {
-    bit2 ram4k_address {};
-    ram4k_address[0] = address[0];
-    ram4k_address[1] = address[1];
     bit12 ram512_address {};
-    ram512_address[0] = address[3];
-    ram512_address[1] = address[4];
-    ram512_address[2] = address[5];
-    ram512_address[3] = address[6];
-    ram512_address[4] = address[7];
-    ram512_address[5] = address[8];
-    ram512_address[6] = address[9];
-    ram512_address[7] = address[10];
-    ram512_address[8] = address[11];
-    ram512_address[9] = address[12];
-    ram512_address[10] = address[13];
-    ram512_address[11] = address[14];
+    ram512_address[0] = address[0];
+    ram512_address[1] = address[1];
+    ram512_address[2] = address[2];
+    ram512_address[3] = address[3];
+    ram512_address[4] = address[4];
+    ram512_address[5] = address[5];
+    ram512_address[6] = address[6];
+    ram512_address[7] = address[7];
+    ram512_address[8] = address[8];
+    ram512_address[9] = address[9];
+    ram512_address[10] = address[10];
+    ram512_address[11] = address[11];
+    bit2 ram4k_address {};
+    ram4k_address[0] = address[12];
+    ram4k_address[1] = address[13];
     if (ram4k_address == 0b00u) {
         ram4k_0_.Write(ram512_address, in, load);
     } else if (ram4k_address == 0b01u) {
