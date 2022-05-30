@@ -40,7 +40,7 @@ TEST_F(ComputerTest, Add_program_test) {
     computer.Load_Program(Add_2_and_3_program);
     computer.Reset();
     computer.Run_Program();
-    // Make sure register A is set to the A-instruction
+    // Make sure 5 gets written to data mem
     byte2 result { computer.Get_data_mem().Read(0b0000'0000'0000'0000u) };
     byte2 expected { 0b0000'0000'0000'0101u };
     ASSERT_EQ(result, expected);
