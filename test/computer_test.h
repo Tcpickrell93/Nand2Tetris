@@ -1,5 +1,7 @@
 #include "../src/computer.h"
-//#include "../src/add.cpp"
+#include "../src/memory.h"
+#include "../src/bits.h"
+#include "../src/machine_language_defines.h"
 
 #include <gtest/gtest.h>
 #include <iostream>
@@ -26,6 +28,12 @@ TEST_F(ComputerTest, Load_program_test) {
         0b0000'0000'0000'0000u,
         0b0000'0000'0000'1111u
     };
+    computer.Load_Program(test_program);
+    RAM16k instruction_memory { computer.Get_instruction_mem() };
+    for (int i = 0; i < test_program.size(); i++) {
+        byte2 address { i };
+        ASSERT_EQ(instruction_memory.Read(address), test_program[i]);
+    }
 }
 
 TEST_F(ComputerTest, Add_program_test) {
