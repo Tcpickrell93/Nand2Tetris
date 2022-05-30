@@ -25,3 +25,9 @@ TEST_F(ParserTest, Has_more_lines_test) {
     expected = false;
     ASSERT_EQ(result, expected);
 }
+
+TEST_F(ParserTest, Advance_test) {
+    std::string result { parser.Advance() };
+    std::string expected { "@2" };
+    ASSERT_EQ(result, expected);
+}
