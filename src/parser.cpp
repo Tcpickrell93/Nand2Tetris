@@ -9,37 +9,8 @@
 Parser::Parser(const std::string file_path) : ifs_ { file_path }
 {
 }
-    /*
-    std::ifstream inFile(file_path);
-    std::string current_line;
-    instruction_type current_instruction_type;
-    std::string current_symbol;
-    std::string current_dest;
-    std::string current_comp;
-    std::string current_jump;
-    
-    while (inFile) {
-        // Get current line
-        std::getline(inFile, current_line);
-        // Get instruction type
-        current_instruction_type = Instruction_type(current_line);
-        if (current_instruction_type == A_INSTRUCTION 
-            || current_instruction_type == L_INSTRUCTION) {
-                // Get symbol
-                current_symbol = Symbol(current_line, current_instruction_type);
-        }
-        if (current_instruction_type == C_INSTRUCTION) {
-            // Get Destination
-            current_dest = Dest(current_line);
-            // Get Computation
-            current_comp = Comp(current_line);
-            // Get Jump
-            current_jump = Jump(current_line);
-        }   
-    }
-    */
 
-bool Parser::HasMoreLines() {
+bool Parser::Has_more_lines() {
     if (ifs_.peek() == EOF) { return false; }
     return true;
 }
