@@ -3,6 +3,12 @@
 
 #include "bits.h"   
 
+enum instruction_type {
+    A_INSTRUCTION,
+    C_INSTRUCTION,
+    L_INSTRUCTION
+};
+
 //                        111'a'cccccc'dddjjj
 #define C_0             0b111'0'101010'000000u
 #define C_1             0b111'0'111111'000000u
@@ -25,6 +31,7 @@
 #define C_M             0b111'1'110000'000000u
 #define C_NOT_M         0b111'1'110001'000000u
 #define C_NEG_M         0b111'1'110011'000000u
+#define C_M_PLUS_1      0b111'1'110111'000000u
 #define C_M_MINUS_1     0b111'1'110010'000000u
 #define C_D_PLUS_M      0b111'1'000010'000000u
 #define C_D_MINUS_M     0b111'1'010011'000000u
