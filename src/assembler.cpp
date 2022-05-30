@@ -63,7 +63,19 @@ namespace Assembly {
     std::string Process_A_instruction(const std::string symbol,
                                     std::map<std::string, int>& symbol_table,
                                     int& current_available_address) {
-        
+        // Check if symbol is an integer
+        bool is_integer { true };
+        for (int i = 0; i < symbol.size(); i++) {
+            if (!std::isdigit(symbol[i])) {
+                is_integer = false;
+            }
+        }
+        // Handle when symbol is an integer
+        if (is_integer) {
+            byte2 binary_address { std::stoi(symbol) };
+            return binary_address.to_string();
+        }
+        // Symbol is a variable
         if (symbol_table.find(symbol) == symbol_table.end()) {
             symbol_table[symbol] = current_available_address;
             byte2 binary_address { current_available_address };
