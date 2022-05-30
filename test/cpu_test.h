@@ -668,6 +668,20 @@ TEST_F(CPUTest, C_NEG_M_test) {
     ASSERT_EQ(result, expected);
 }
 
+TEST_F(CPUTest, C_M_PLUS_1_test) {
+    // Update CPU to set register A to the value stored in M minus 1
+    byte2 instruction { C_M_PLUS_1|D_A };
+    cpu.Update(inM_1s,
+               instruction,
+               reset_0,
+               outM,
+               writeM,
+               addressM);
+    byte2 result { cpu.Get_reg_A() };
+    byte2 expected { 0b0000'0000'0000'0000u };
+    ASSERT_EQ(result, expected);
+}
+
 TEST_F(CPUTest, C_M_MINUS_1_test) {
     // Update CPU to set register A to the value stored in M minus 1
     byte2 instruction { C_M_MINUS_1|D_A };
