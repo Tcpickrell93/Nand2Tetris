@@ -18,5 +18,5 @@ public:
     std::string Jump(const std::string line);
 
 private:
-    std::ifstream ifs;
+    std::ifstream ifs_;
 };
