@@ -11,6 +11,7 @@ Parser::Parser(const std::string file_path) : ifs_ { file_path }
 }
 
 bool Parser::Has_more_lines() {
+    //std::cout << ifs_.peek() << std::endl;
     if (ifs_.peek() == EOF) { return false; }
     return true;
 }
@@ -32,7 +33,7 @@ instruction_type Parser::Instruction_type(const std::string line) {
 }
 
 std::string Parser::Symbol(const std::string line, 
-                        const instruction_type instruction) {
+                           const instruction_type instruction) {
     std::string symbol { line };
     if (instruction == A_INSTRUCTION) {
         symbol.erase(0, 1);
@@ -54,8 +55,11 @@ std::string Parser::Dest(const std::string line) {
 
 std::string Parser::Comp(const std::string line) {
     std::string comp { line };
-    int equal_pos = comp.find('=');
     int semi_colon_pos = comp.find(';');
+    if (semi_colon_pos != std::string::npos) {
+        comp.erase(semi_colon_pos, comp.size()-semi_colon_pos);
+    }
+    int equal_pos = comp.find('=');
     comp.erase(0, equal_pos+1);
     return comp;
 }
