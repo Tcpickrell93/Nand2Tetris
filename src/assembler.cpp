@@ -72,17 +72,17 @@ namespace Assembly {
         }
         // Handle when symbol is an integer
         if (is_integer) {
-            byte2 binary_address { std::stoi(symbol) };
+            byte2 binary_address(std::stoi(symbol));
             return binary_address.to_string();
         }
         // Symbol is a variable
         if (symbol_table.find(symbol) == symbol_table.end()) {
             symbol_table[symbol] = current_available_address;
-            byte2 binary_address { current_available_address };
+            byte2 binary_address(current_available_address);
             current_available_address++;
             return binary_address.to_string();
         } else {
-            byte2 binary_address { symbol_table[symbol] };
+            byte2 binary_address(symbol_table[symbol]);
             return binary_address.to_string();
         }
     }
@@ -96,7 +96,7 @@ namespace Assembly {
 
     std::string Process_L_instruction(const std::string symbol, 
                                     std::map<std::string, int> symbol_table) {
-        byte2 instruction { symbol_table[symbol] };
+        byte2 instruction(symbol_table[symbol]);
         return instruction.to_string();
     }
 
@@ -104,7 +104,7 @@ namespace Assembly {
                     std::map<std::string, int>& symbol_table) {
         // Open output file
         std::string out_file_path { in_file_path };
-        int ext_pos { out_file_path.find('.') };
+        int ext_pos { (int)out_file_path.find('.') };
         out_file_path.erase(ext_pos, out_file_path.size()-ext_pos);
         std::ofstream outfile;
         outfile.open(out_file_path);

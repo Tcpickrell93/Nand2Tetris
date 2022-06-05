@@ -31,7 +31,7 @@ TEST_F(ComputerTest, Load_program_test) {
     computer.Load_Program(test_program);
     RAM16k instruction_memory { computer.Get_instruction_mem() };
     for (int i = 0; i < test_program.size(); i++) {
-        byte2 address { i };
+        byte2 address(i);
         ASSERT_EQ(instruction_memory.Read(address), test_program[i]);
     }
 }

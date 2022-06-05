@@ -5,7 +5,7 @@
 void Computer::Load_Program(const std::vector<byte2> program_instructions) {
     //std::cout << "LOAD PROGRAM" << std::endl;
     for (int i = 0; i < program_instructions.size(); i++) {
-        byte2 address { i };
+        byte2 address(i);
         //std::cout << "address: \t\t" << address << std::endl;
         //std::cout << "program instruction: \t" << program_instructions[i] << std::endl;
         instruction_mem_.Write(address, program_instructions[i], 0b1u);
