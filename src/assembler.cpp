@@ -1,3 +1,4 @@
+#include "assembler.h"
 #include "parser.h"
 #include "code_gen.h"
 
@@ -6,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 
-namespace Assembly {
+namespace Assembler {
 
     void Initialize_symbol_table(std::map<std::string, int>& symbol_table) {
         symbol_table["R0"] =        0;
@@ -61,8 +62,8 @@ namespace Assembly {
     }
 
     std::string Process_A_instruction(const std::string symbol,
-                                    std::map<std::string, int>& symbol_table,
-                                    int& current_available_address) {
+                                      std::map<std::string, int>& symbol_table,
+                                      int& current_available_address) {
         // Check if symbol is an integer
         bool is_integer { true };
         for (int i = 0; i < symbol.size(); i++) {
@@ -88,20 +89,20 @@ namespace Assembly {
     }
 
     std::string Process_C_instruction(const std::string dest,
-                                    const std::string comp,
-                                    const std::string jump) {
+                                      const std::string comp,
+                                      const std::string jump) {
         byte2 instruction { Code_gen::Dest(dest) | Code_gen::Comp(comp) | Code_gen::Jump(jump) };
         return instruction.to_string();
     }
 
     std::string Process_L_instruction(const std::string symbol, 
-                                    std::map<std::string, int> symbol_table) {
+                                      std::map<std::string, int> symbol_table) {
         byte2 instruction(symbol_table[symbol]);
         return instruction.to_string();
     }
 
     void Second_pass(const std::string in_file_path, 
-                    std::map<std::string, int>& symbol_table) {
+                     std::map<std::string, int>& symbol_table) {
         // Open output file
         std::string out_file_path { in_file_path };
         int ext_pos { (int)out_file_path.find('.') };
@@ -134,17 +135,17 @@ namespace Assembly {
             switch (current_instruction_type) {
                 case A_INSTRUCTION:
                     current_symbol = parser.Symbol(current_line, current_instruction_type);
-                    outfile << Assembly::Process_A_instruction(current_symbol, symbol_table, current_available_address) << std::endl;
+                    outfile << Process_A_instruction(current_symbol, symbol_table, current_available_address) << std::endl;
                 
                 case L_INSTRUCTION:
                     current_symbol = parser.Symbol(current_line, current_instruction_type);
-                    outfile << Assembly::Process_L_instruction(current_symbol, symbol_table) << std::endl;
+                    outfile << Process_L_instruction(current_symbol, symbol_table) << std::endl;
 
                 case C_INSTRUCTION:
                     current_dest = parser.Dest(current_line);
                     current_comp = parser.Comp(current_line);
                     current_jump = parser.Jump(current_line);
-                    outfile << Assembly::Process_C_instruction(current_dest, current_comp, current_jump) << std::endl;
+                    outfile << Process_C_instruction(current_dest, current_comp, current_jump) << std::endl;
             } 
         }
         outfile.close();
@@ -160,4 +161,4 @@ namespace Assembly {
         Second_pass(in_file_path, symbol_table);
     }
 
-} // Assembly
+} // Assembler
