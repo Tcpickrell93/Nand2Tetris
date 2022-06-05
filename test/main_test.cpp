@@ -5,6 +5,7 @@
 #include "cpu_test.h"
 #include "computer_test.h"
 #include "parser_test.h"
+#include "assembler_test.h"
 
 #include <gtest/gtest.h>
 
