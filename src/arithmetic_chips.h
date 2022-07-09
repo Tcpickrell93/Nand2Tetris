@@ -3,12 +3,27 @@
 
 #include "bits.h" 
 
-bit2 HalfAdder(const bit& a, const bit& b); 
-bit2 FullAdder(const bit& a, const bit& b, const bit& c); 
-byte2 Add16(const byte2& a, const byte2& b);
-byte2 Inc16(const byte2& a);
-byte2 ALU(const byte2& a, const byte2& b, const bit& za, const bit& na,
-          const bit& zb, const bit& nb, const bit& f, const bit& no,
-          bit& zr, bit& ng); 
+bit2_u HalfAdder(const bit1_u& a, 
+                 const bit1_u& b); 
+
+bit2_u FullAdder(const bit1_u& a, 
+                 const bit1_u& b, 
+                 const bit1_u& c); 
+
+byte2_u Add16(const byte2_u& a, 
+              const byte2_u& b);
+
+byte2_u Inc16(const byte2_u& a);
+
+byte2_u ALU(const byte2_u& a, 
+            const byte2_u& b, 
+            const bit1_u& za, 
+            const bit1_u& na,
+            const bit1_u& zb, 
+            const bit1_u& nb, 
+            const bit1_u& f, 
+            const bit1_u& no,
+            bit1_u& zr, 
+            bit1_u& ng); 
 
 #endif // ARITHMETIC_CHIPS_H
