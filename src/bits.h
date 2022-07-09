@@ -1,12 +1,76 @@
-#include <bitset>
+#ifndef BITS_H
+#define BITS_H
 
-typedef std::bitset<1> bit;
-typedef std::bitset<2> bit2;
-typedef std::bitset<3> bit3;
-typedef std::bitset<4> bit4;
-typedef std::bitset<6> bit6;
-typedef std::bitset<9> bit9;
-typedef std::bitset<12> bit12;
-typedef std::bitset<14> bit14;
-typedef std::bitset<8> byte;
-typedef std::bitset<16> byte2;
+
+union bit1_u {
+    struct bit1_s {
+        unsigned int val : 1;
+    } bit1_s;
+    unsigned int bit1;
+};
+
+
+union bit2_u {
+    struct bit2_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+    } bit2_s;
+    unsigned int bit2;
+};
+
+union bit3_u {
+    struct bit3_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+    } bit3_s;
+    unsigned int bit3;
+};
+
+union bit4_u {
+    struct bit4_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+    } bit4_s;
+    unsigned int bit4;
+};
+
+union byte1_u {
+    struct byte1_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+        unsigned int val4 : 1;
+        unsigned int val5 : 1;
+        unsigned int val6 : 1;
+        unsigned int val7 : 1;
+    } byte1_s;
+    unsigned int byte1;
+};
+
+union byte2_u {
+    struct byte2_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+        unsigned int val4 : 1;
+        unsigned int val5 : 1;
+        unsigned int val6 : 1;
+        unsigned int val7 : 1;
+        unsigned int val8 : 1;
+        unsigned int val9 : 1;
+        unsigned int val10 : 1;
+        unsigned int val11 : 1;
+        unsigned int val12 : 1;
+        unsigned int val13 : 1;
+        unsigned int val14 : 1;
+        unsigned int val15 : 1;
+    } byte2_s;
+    unsigned int byte2;
+};
+
+#endif // BITS_H
