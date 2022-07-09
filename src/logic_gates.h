@@ -3,26 +3,26 @@
 
 #include "bits.h"
 
-bit Nand(const bit& a, const bit& b);
-bit Not(const bit& a); 
-bit And(const bit& a, const bit& b); 
-bit Or(const bit& a, const bit& b); 
-bit Xor(const bit& a, const bit& b); 
-bit Mux(const bit& a, const bit& b, const bit& sel); 
-bit2 DMux(const bit& a, const bit& sel); 
-bit AndMuxOr(const bit& a, const bit& b, const bit& sel); 
-byte2 Not16(const byte2& a); 
-byte2 And16(const byte2& a, const byte2& b); 
-byte2 Or16(const byte2& a, const byte2& b); 
-byte2 Mux16(const byte2& a, const byte2& b, const bit& sel); 
-bit Or8Way(const byte& a); 
-byte2 Mux4Way16(const byte2& a, const byte2& b,
-                const byte2& c, const byte2& d, const bit2& sel); 
-byte2 Mux8Way16(const byte2& a, const byte2& b,
-                const byte2& c, const byte2& d,
-                const byte2& e, const byte2& f, 
-                const byte2& g, const byte2& h, const bit3& sel); 
-bit4 DMux4Way(const bit& a, const bit2& sel); 
-byte DMux8Way(const bit& a, const bit3& sel); 
+bit1_u Nand(const bit1_u& a, const bit1_u& b);
+bit1_u Not(const bit1_u& a); 
+bit1_u And(const bit1_u& a, const bit1_u& b); 
+bit1_u Or(const bit1_u& a, const bit1_u& b); 
+bit1_u Xor(const bit1_u& a, const bit1_u& b); 
+bit1_u Mux(const bit1_u& a, const bit1_u& b, const bit1_u& sel); 
+bit2_u DMux(const bit1_u& a, const bit1_u& sel); 
+bit1_u AndMuxOr(const bit1_u& a, const bit1_u& b, const bit1_u& sel); 
+byte2_u Not16(const byte2_u& a); 
+byte2_u And16(const byte2_u& a, const byte2_u& b); 
+byte2_u Or16(const byte2_u& a, const byte2_u& b); 
+byte2_u Mux16(const byte2_u& a, const byte2_u& b, const bit1_u& sel); 
+bit1_u Or8Way(const byte1_u& a); 
+byte2_u Mux4Way16(const byte2_u& a, const byte2_u& b,
+                const byte2_u& c, const byte2_u& d, const bit2_u& sel); 
+byte2_u Mux8Way16(const byte2_u& a, const byte2_u& b,
+                const byte2_u& c, const byte2_u& d,
+                const byte2_u& e, const byte2_u& f, 
+                const byte2_u& g, const byte2_u& h, const bit3_u& sel); 
+bit4_u DMux4Way(const bit1_u& a, const bit2_u& sel); 
+byte1_u DMux8Way(const bit1_u& a, const bit3_u& sel); 
 
 #endif // LOGIC_GATES_H
