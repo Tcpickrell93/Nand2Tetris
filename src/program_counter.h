@@ -3,13 +3,11 @@
 
 #include "memory.h"
 
-class ProgramCounter {
-public:
-    void Update(const byte2& in, const bit& load, const bit& increment, const bit& reset);
-    byte2 Out();
-    
-private:
-    Register16 reg_ {};
-};
-    
+struct ProgramCounter;
+void UpdateProgramCounter(ProgramCounter& pc, 
+                          const byte2_u& in, 
+                          const bit1_u& load, 
+                          const bit1_u& increment, 
+                          const bit1_u& reset);
+
 # endif // PROGRAM_COUNTER_H
