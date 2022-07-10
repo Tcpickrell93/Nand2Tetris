@@ -6,8 +6,8 @@ bit2_u HalfAdder(const bit1_u& a,
                  const bit1_u& b) {
     /* Returns [carry, sum] in bits (sum=LSB) */
     bit2_u result{};
-    result.bit2_s.val0 = Xor(a, b).bit1;
-    result.bit2_s.val1 = And(a, b).bit1;
+    result.bit2_s.val0 = Xor(a, b).value;
+    result.bit2_s.val1 = And(a, b).value;
     return result;
 }
 
@@ -20,7 +20,7 @@ bit2_u FullAdder(const bit1_u& a,
     bit1_u half_res_1 { half_res.bit2_s.val1 };
     bit2_u result { HalfAdder(half_res_0, c) };
     bit1_u result_1 { result.bit2_s.val1 };
-    result.bit2_s.val1 = Or(half_res_1, result_1).bit1;
+    result.bit2_s.val1 = Or(half_res_1, result_1).value;
     return result;
 }
     
@@ -145,31 +145,31 @@ byte2_u ALU(const byte2_u& a,
     byte2_u a_copy { a };
     byte2_u b_copy { b };
     byte2_u output {};
-    if (za.bit1 == 1) {
-        a_copy.byte2 = 0;
+    if (za.value == 1) {
+        a_copy.value = 0;
     }
-    if (na.bit1 == 1) {
+    if (na.value == 1) {
         a_copy = Not16(a_copy);
     }
-    if (zb.bit1 == 1) {
-        b_copy.byte2 = 0;
+    if (zb.value == 1) {
+        b_copy.value = 0;
     }
-    if (nb.bit1 == 1) {
+    if (nb.value == 1) {
         b_copy = Not16(b_copy);
     }
-    if (f.bit1 == 1) {
+    if (f.value == 1) {
         output = Add16(a_copy, b_copy);
     } else {
         output = And16(a_copy, b_copy);
     }
-    if (no.bit1 == 1) {
+    if (no.value == 1) {
         output = Not16(output);
     }
-    if (output.byte2 == 0) {
-        zr.bit1 = 1;
+    if (output.value == 0) {
+        zr.bit1_s.val = 1;
     }
     if (output.byte2_s.val15 == 1) {
-        ng.bit1 = 1;
+        ng.bit1_s.val = 1;
     }
     return output;
 }
