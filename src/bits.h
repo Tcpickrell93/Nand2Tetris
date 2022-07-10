@@ -72,4 +72,12 @@ union byte2_u {
     unsigned int value;
 };
 
+struct jump_flags_s {
+    unsigned int j1 : 1;
+    unsigned int j2 : 1;
+    unsigned int j3 : 1;
+    unsigned int zr : 1;
+    unsigned int ng : 1;
+};
+
 #endif // BITS_H
