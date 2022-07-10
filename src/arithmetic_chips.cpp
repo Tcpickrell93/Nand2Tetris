@@ -5,9 +5,10 @@
 bit2_u HalfAdder(const bit1_u& a, 
                  const bit1_u& b) {
     /* Returns [carry, sum] in bits (sum=LSB) */
-    bit2_u result{};
+    bit2_u result{ .value = 0 };
     result.bit2_s.val0 = Xor(a, b).value;
     result.bit2_s.val1 = And(a, b).value;
+
     return result;
 }
 
@@ -15,22 +16,23 @@ bit2_u FullAdder(const bit1_u& a,
                  const bit1_u& b, 
                  const bit1_u& c) {
     /* Returns [carry, sum] in bits (sum=LSB) */
-    bit2_u half_res { HalfAdder(a, b) };
-    bit1_u half_res_0 { half_res.bit2_s.val0 };
+    bit2_u half_res = HalfAdder(a, b);
+    bit1_u half_res_0 { .value = half_res.bit2_s.val0 };
     bit1_u half_res_1 { half_res.bit2_s.val1 };
-    bit2_u result { HalfAdder(half_res_0, c) };
-    bit1_u result_1 { result.bit2_s.val1 };
+    bit2_u result = HalfAdder(half_res_0, c);
+    bit1_u result_1 { .value = result.bit2_s.val1 };
     result.bit2_s.val1 = Or(half_res_1, result_1).value;
+
     return result;
 }
     
 byte2_u Add16(const byte2_u& a, 
               const byte2_u& b) {
-    byte2_u sum {};
-    bit1_u carry {};
-    bit1_u a_bit { a.byte2_s.val0 };
-    bit1_u b_bit { b.byte2_s.val0 };
-    bit2_u temp_res { FullAdder(a_bit, b_bit, carry) };
+    byte2_u sum { .value = 0 };
+    bit1_u carry { .value = 0 };
+    bit1_u a_bit { .value = a.byte2_s.val0 };
+    bit1_u b_bit { .value = b.byte2_s.val0 };
+    bit2_u temp_res = FullAdder(a_bit, b_bit, carry);
     sum.byte2_s.val0 = temp_res.bit2_s.val0;
     carry.bit1_s.val = temp_res.bit2_s.val1;
 
@@ -128,7 +130,7 @@ byte2_u Add16(const byte2_u& a,
 }
     
 byte2_u Inc16(const byte2_u& a) {
-    byte2_u increment{ 1 };
+    byte2_u increment { .value = 1 };
     return Add16(a, increment);
 }
 
@@ -142,9 +144,9 @@ byte2_u ALU(const byte2_u& a,
             const bit1_u& no,
             bit1_u& zr, 
             bit1_u& ng) {
-    byte2_u a_copy { a };
-    byte2_u b_copy { b };
-    byte2_u output {};
+    byte2_u a_copy = a;
+    byte2_u b_copy = b;
+    byte2_u output { .value = 0 };
     if (za.value == 1) {
         a_copy.value = 0;
     }
