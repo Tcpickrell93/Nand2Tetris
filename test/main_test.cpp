@@ -6,10 +6,17 @@
 #include "computer_test.h"
 #include "parser_test.h"
 #include "assembler_test.h"
+#include "../src/bits.h"
 
 #include <gtest/gtest.h>
 
 int main() {
     testing::InitGoogleTest();
-    return RUN_ALL_TESTS();
+
+    int test_result = RUN_ALL_TESTS();
+
+    //printf("size of bit_2_s is %lu\n", sizeof(struct bit_2_s));
+    //printf("size of bit_2_u is %lu\n", sizeof(union bit_2_u));
+
+    return test_result;
 }
