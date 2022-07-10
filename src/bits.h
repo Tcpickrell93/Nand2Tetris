@@ -6,16 +6,15 @@ union bit1_u {
     struct bit1_s {
         unsigned int val : 1;
     } bit1_s;
-    unsigned int bit1;
+    unsigned int value;
 };
-
 
 union bit2_u {
     struct bit2_s {
         unsigned int val0 : 1;
         unsigned int val1 : 1;
     } bit2_s;
-    unsigned int bit2;
+    unsigned int value;
 };
 
 union bit3_u {
@@ -24,7 +23,7 @@ union bit3_u {
         unsigned int val1 : 1;
         unsigned int val2 : 1;
     } bit3_s;
-    unsigned int bit3;
+    unsigned int value;
 };
 
 union bit4_u {
@@ -34,7 +33,7 @@ union bit4_u {
         unsigned int val2 : 1;
         unsigned int val3 : 1;
     } bit4_s;
-    unsigned int bit4;
+    unsigned int value;
 };
 
 union byte1_u {
@@ -48,7 +47,7 @@ union byte1_u {
         unsigned int val6 : 1;
         unsigned int val7 : 1;
     } byte1_s;
-    unsigned int byte1;
+    unsigned int value;
 };
 
 union byte2_u {
@@ -70,7 +69,7 @@ union byte2_u {
         unsigned int val14 : 1;
         unsigned int val15 : 1;
     } byte2_s;
-    unsigned int byte2;
+    unsigned int value;
 };
 
 #endif // BITS_H
