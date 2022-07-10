@@ -1,7 +1,7 @@
 GOOGLE_TEST_LIB := gtest
 GOOGLE_TEST_INCLUDE := /usr/include
 
-G++_COMPILE_FLAGS := -c -I ${GOOGLE_TEST_INCLUDE} -std=c++17
+G++_COMPILE_FLAGS := -c -I ${GOOGLE_TEST_INCLUDE} -std=c99
 G++_LINKING_FLAGS := -L /usr/lib -l ${GOOGLE_TEST_LIB} -l pthread
 
 SRC_DIR := ./src
