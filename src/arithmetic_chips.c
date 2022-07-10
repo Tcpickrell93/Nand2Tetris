@@ -1,5 +1,6 @@
 #include "arithmetic_chips.h"
 #include "logic_gates.h"
+#include "bits.h"
 
 
 bit2_u HalfAdder(const bit1_u& a, 

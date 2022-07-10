@@ -73,32 +73,32 @@ namespace Assembler {
         }
         // Handle when symbol is an integer
         if (is_integer) {
-            byte2 binary_address(std::stoi(symbol));
-            return binary_address.to_string();
+            byte2_u binary_address { .value = std::stoi(symbol) };
+            //return binary_address.to_string();
         }
         // Symbol is a variable
         if (symbol_table.find(symbol) == symbol_table.end()) {
             symbol_table[symbol] = current_available_address;
-            byte2 binary_address(current_available_address);
+            byte2_u binary_address { .value = current_available_address };
             current_available_address++;
-            return binary_address.to_string();
+            //return binary_address.to_string();
         } else {
-            byte2 binary_address(symbol_table[symbol]);
-            return binary_address.to_string();
+            byte2_u binary_address { .value = symbol_table[symbol] };
+            //return binary_address.to_string();
         }
     }
 
     std::string Process_C_instruction(const std::string dest,
                                       const std::string comp,
                                       const std::string jump) {
-        byte2 instruction { Code_gen::Dest(dest) | Code_gen::Comp(comp) | Code_gen::Jump(jump) };
-        return instruction.to_string();
+        //byte2_u instruction { .value = (Code_gen::Dest(dest) | Code_gen::Comp(comp) | Code_gen::Jump(jump)) };
+        //return instruction.to_string();
     }
 
     std::string Process_L_instruction(const std::string symbol, 
                                       std::map<std::string, int> symbol_table) {
-        byte2 instruction(symbol_table[symbol]);
-        return instruction.to_string();
+        //byte2_u instruction(symbol_table[symbol]);
+        //return instruction.to_string();
     }
 
     void Second_pass(const std::string in_file_path, 
