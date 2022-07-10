@@ -3,7 +3,9 @@
 
 #include "memory.h"
 
-struct ProgramCounter;
+struct ProgramCounter {
+    Register16_u reg;
+};
 void UpdateProgramCounter(ProgramCounter& pc, 
                           const byte2_u& in, 
                           const bit1_u& load, 

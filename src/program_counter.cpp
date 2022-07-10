@@ -3,9 +3,6 @@
 #include "logic_gates.h"
 #include "memory.h"
 
-struct ProgramCounter {
-    Register16_u reg;
-};
 
 void UpdateProgramCounter(ProgramCounter& pc, 
                           const byte2_u& in, 
@@ -15,8 +12,8 @@ void UpdateProgramCounter(ProgramCounter& pc,
     byte2_u zero { .value = 0 };
     bit1_u one { .value = 1 };
     UpdateRegister16(pc.reg, 
-                     Mux16(Mux16(Mux16(pc.reg.value,
-                                       Inc16(pc.reg.value),
+                     Mux16(Mux16(Mux16(pc.reg.r16_s.dff16,
+                                       Inc16(pc.reg.r16_s.dff16),
                                        increment),
                                  in,
                                  load),
