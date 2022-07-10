@@ -43,8 +43,6 @@ void UpdateCPU(CPU& cpu,
                byte2_u& outM, 
                bit1_u& writeM, 
                byte2_u& addressM) {
-    //std::cout << "OutM before: " << outM << std::endl;
-
     // if inst_15 == 0, do not perform ALU calculations
     bit1_u ng { .value = 0 };
     bit1_u zr { .value = 0 };
@@ -79,18 +77,12 @@ void UpdateCPU(CPU& cpu,
                zr,
                ng);
 
-    //std::cout << "OutM after: " << outM << std::endl;
-
-    //std::cout << "Register A before: " << reg_A_.Out() << std::endl;
-
     // if inst_15 == 0, instruction is an address that gets loaded into A register
     // else, instruction is a C-instruction and ALU output gets loaded into A register
     bit1_u load_a { .value = 1 };
     UpdateRegister16(cpu.reg_A, 
                      Mux16(instruction, outM, inst_15), 
                      Mux(load_a, inst_5, inst_15));
-
-    //std::cout << "Register A after: " << reg_A_.Out() << std::endl;
 
     // if inst_15 == 0, do not update reg_D_
     // else, update reg_D_ if inst_4 == 1
