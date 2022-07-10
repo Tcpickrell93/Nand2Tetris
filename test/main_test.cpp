@@ -1,11 +1,11 @@
 #include "logic_gates_test.h"
-#include "arithmetic_chips_test.h"
-#include "memory_test.h"
-#include "program_counter_test.h"
-#include "cpu_test.h"
-#include "computer_test.h"
-#include "parser_test.h"
-#include "assembler_test.h"
+//#include "arithmetic_chips_test.h"
+//#include "memory_test.h"
+//#include "program_counter_test.h"
+//#include "cpu_test.h"
+//#include "computer_test.h"
+//#include "parser_test.h"
+//#include "assembler_test.h"
 #include "../src/bits.h"
 
 #include <gtest/gtest.h>
