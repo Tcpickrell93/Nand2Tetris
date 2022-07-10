@@ -36,6 +36,71 @@ union bit4_u {
     unsigned int value;
 };
 
+union bit6_u {
+    struct bit6_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+        unsigned int val4 : 1;
+        unsigned int val5 : 1;
+    } bit6_s;
+    unsigned int value;
+};
+
+union bit9_u {
+    struct bit9_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+        unsigned int val4 : 1;
+        unsigned int val5 : 1;
+        unsigned int val6 : 1;
+        unsigned int val7 : 1;
+        unsigned int val8 : 1;
+    } bit9_s;
+    unsigned int value;
+};
+
+union bit12_u {
+    struct bit12_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+        unsigned int val4 : 1;
+        unsigned int val5 : 1;
+        unsigned int val6 : 1;
+        unsigned int val7 : 1;
+        unsigned int val8 : 1;
+        unsigned int val9 : 1;
+        unsigned int val10 : 1;
+        unsigned int val11 : 1;
+    } bit12_s;
+    unsigned int value;
+};
+
+union bit14_u {
+    struct bit14_s {
+        unsigned int val0 : 1;
+        unsigned int val1 : 1;
+        unsigned int val2 : 1;
+        unsigned int val3 : 1;
+        unsigned int val4 : 1;
+        unsigned int val5 : 1;
+        unsigned int val6 : 1;
+        unsigned int val7 : 1;
+        unsigned int val8 : 1;
+        unsigned int val9 : 1;
+        unsigned int val10 : 1;
+        unsigned int val11 : 1;
+        unsigned int val12 : 1;
+        unsigned int val13 : 1;
+    } bit14_s;
+    unsigned int value;
+};
+
 union byte1_u {
     struct byte1_s {
         unsigned int val0 : 1;
