@@ -3,7 +3,18 @@
 
 #include <iostream>
 
+union dff_u {
+    struct dff_s {
+        unsigned int val : 1;
+    } dff_s;
+    unsigned int value;
+};
 
+void UpdateDFF(dff_u& dff, const bit1_u& in) {
+    dff.dff_s.val = in.bit1;
+};
+
+/*
 bit DataFlipFLop::Out() {
     return prev_;
 }
@@ -11,7 +22,21 @@ bit DataFlipFLop::Out() {
 void DataFlipFLop::Update(const bit& in) {
     prev_ = in;
 }
+*/
 
+union RegisterBit_u {
+    struct RegisterBit_s {
+        dff_u dff;
+    };
+    unsigned int value;
+};
+
+void UpdateRegisterBit(RegisterBit& regbit, const bit1_u& in, const bit1_u& load) {
+
+}
+
+
+/*
 bit RegisterBit::Out() {
     return dff_.Out();
 }
@@ -20,6 +45,7 @@ void RegisterBit::Update(const bit& in, const bit& load) {
     bit mux_out { Mux(dff_.Out(), in, load) };
     dff_.Update(mux_out);
 }
+*/
 
 Register16::Register16() {}
 

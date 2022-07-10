@@ -3,6 +3,11 @@
 
 #include "bits.h"
 
+
+union dff_u;
+void UpdateDFF(dff_u& dff, const bit1_u& in);
+
+/*
 class DataFlipFLop {
 public:
     void Update(const bit& in);
@@ -11,7 +16,12 @@ public:
 private:
     bit prev_ {};
 };
-    
+*/
+
+struct RegisterBit;
+void UpdateRegisterBit(RegisterBit& regbit, const bit1_u& in, const bit1_u& load);
+
+/*
 class RegisterBit {
 public:
     void Update(const bit& in, const bit& load);
@@ -20,6 +30,7 @@ public:
 private:
     DataFlipFLop dff_ {};
 };
+*/
 
 class Register16 {
 public:
