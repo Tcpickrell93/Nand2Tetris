@@ -3,64 +3,65 @@
 
 #include "bits.h"
 
-bit1_u Nand(const bit1_u& a, 
-            const bit1_u& b);
+union bit1_u* Nand(union bit1_u *a, 
+                   union bit1_u *b);
 
-bit1_u Not(const bit1_u& a); 
+union bit1_u* Not(union bit1_u *a); 
 
-bit1_u And(const bit1_u& a, 
-           const bit1_u& b); 
+union bit1_u* And(union bit1_u *a, 
+                 union bit1_u *b); 
 
-bit1_u Or(const bit1_u& a, 
-          const bit1_u& b); 
+union bit1_u* Or(union bit1_u *a, 
+                 union bit1_u *b); 
 
-bit1_u Xor(const bit1_u& a, 
-           const bit1_u& b); 
+union bit1_u* Xor(union bit1_u *a, 
+                  union bit1_u *b); 
 
-bit1_u Mux(const bit1_u& a, 
-           const bit1_u& b, 
-           const bit1_u& sel); 
+union bit1_u* Mux(union bit1_u *a, 
+                  union bit1_u *b, 
+                  union bit1_u *sel); 
 
-bit2_u DMux(const bit1_u& a, 
-            const bit1_u& sel); 
+union bit2_u* DMux(union bit1_u *a, 
+                   union bit1_u *sel); 
 
-bit1_u AndMuxOr(const bit1_u& a, 
-                const bit1_u& b, 
-                const bit1_u& sel); 
+union bit1_u* AndMuxOr(union bit1_u *a, 
+                       union bit1_u *b, 
+                       union bit1_u *sel); 
 
-byte2_u Not16(const byte2_u& a); 
-byte2_u And16(const byte2_u& a, 
-              const byte2_u& b); 
+union byte2_u* Not16(union byte2_u *a); 
 
-byte2_u Or16(const byte2_u& a, 
-             const byte2_u& b); 
+union byte2_u* And16(union byte2_u *a, 
+                     union byte2_u *b); 
 
-byte2_u Mux16(const byte2_u& a, 
-              const byte2_u& b, 
-              const bit1_u& sel); 
+union byte2_u* Or16(union byte2_u *a, 
+                    union byte2_u *b); 
 
-bit1_u Or8Way(const byte1_u& a); 
+union byte2_u* Mux16(union byte2_u *a, 
+                     union byte2_u *b, 
+                     union bit1_u *sel); 
 
-byte2_u Mux4Way16(const byte2_u& a, 
-                  const byte2_u& b,
-                  const byte2_u& c, 
-                  const byte2_u& d, 
-                  const bit2_u& sel); 
+union bit1_u* Or8Way(union byte1_u *a); 
 
-byte2_u Mux8Way16(const byte2_u& a, 
-                  const byte2_u& b,
-                  const byte2_u& c, 
-                  const byte2_u& d,
-                  const byte2_u& e, 
-                  const byte2_u& f, 
-                  const byte2_u& g, 
-                  const byte2_u& h, 
-                  const bit3_u& sel); 
+union byte2_u* Mux4Way16(union byte2_u *a, 
+                         union byte2_u *b,
+                         union byte2_u *c, 
+                         union byte2_u *d, 
+                         union bit2_u *sel); 
 
-bit4_u DMux4Way(const bit1_u& a, 
-                const bit2_u& sel); 
+union byte2_u* Mux8Way16(union byte2_u *a, 
+                         union byte2_u *b,
+                         union byte2_u *c, 
+                         union byte2_u *d,
+                         union byte2_u *e, 
+                         union byte2_u *f, 
+                         union byte2_u *g, 
+                         union byte2_u *h, 
+                         union bit3_u *sel); 
+
+union bit4_u* DMux4Way(union bit1_u *a, 
+                       union bit2_u *sel); 
                 
-byte1_u DMux8Way(const bit1_u& a, 
-                 const bit3_u& sel); 
+union byte1_u* DMux8Way(union bit1_u *a, 
+                        union bit3_u *sel); 
 
 #endif // LOGIC_GATES_H
