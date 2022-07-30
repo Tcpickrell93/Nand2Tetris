@@ -1,140 +1,149 @@
-#include "../src/arithmetic_chips.h"
-
 #include <gtest/gtest.h>
 
+extern "C"
+{
+#include "../src/arithmetic_chips.h"
+#include "../src/bits.h"
+}
 
 class ArithmeticChipsTest: public ::testing::Test {
     protected:
-        bit a{ 0b0u };
-        bit b{ 0b0u };
-        bit c{ 0b0u };
+        union bit1_u a = { .value = 0 };
+        union bit1_u b = { .value = 0 };
+        union bit1_u c = { .value = 0 };
 
-        bit za{ 0b0u };
-        bit na{ 0b0u };
-        bit zb{ 0b0u };
-        bit nb{ 0b0u };
-        bit f{ 0b0u };
-        bit no{ 0b0u };
-        bit zr{ 0b0u };
-        bit ng{ 0b0u };
+        union bit1_u za = { .value = 0 };
+        union bit1_u na = { .value = 0 };
+        union bit1_u zb = { .value = 0 };
+        union bit1_u nb = { .value = 0 };
+        union bit1_u f = { .value = 0 };
+        union bit1_u no = { .value = 0 };
+        union bit1_u zr = { .value = 0 };
+        union bit1_u ng = { .value = 0 };
 
-        byte2 a16{ 0b0000'0000'1111'0000u };
-        byte2 b16{ 0b0000'0000'0000'1111u };
+        union byte2_u a16 = { .value = 240 };
+        union byte2_u b16 = { .value = 15 };
+
+        union bit1_u res_bit1 = { .value = 0 };
+        union bit2_u res_bit2 = { .value = 0 };
+        union bit4_u res_bit4 = { .value = 0 };
+        union byte1_u res_byte1 = { .value = 0 };
+        union byte2_u res_byte2 = { .value = 0 };
 };
 
 TEST_F(ArithmeticChipsTest, HalfAdder_in_00) {
     // a=0, b=0
-    bit2 result{ HalfAdder(a, b) };
-    bit2 expected{ 0b00u };
-    ASSERT_EQ(result, expected);
+    HalfAdder(&a, &b, &res_bit2);
+    union bit2_u expected = { .value = 0 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, HalfAdder_in_10) {
     // a=1, b=0
-    a.set();
-    bit2 result{ HalfAdder(a, b) };
-    bit2 expected{ 0b01u };
-    ASSERT_EQ(result, expected);
+    a.value = 1;
+    HalfAdder(&a, &b, &res_bit2);
+    union bit2_u expected = { .value = 1 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, HalfAdder_in_01) {
     // a=0, b=1
-    b.set();
-    bit2 result{ HalfAdder(a, b) };
-    bit2 expected{ 0b01u };
-    ASSERT_EQ(result, expected);
+    b.value = 1;
+    HalfAdder(&a, &b, &res_bit2);
+    union bit2_u expected = { .value = 1 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, HalfAdder_in_11) {
     // a=1, b=1
-    a.set();
-    b.set();
-    bit2 result{ HalfAdder(a, b) };
-    bit2 expected{ 0b10u };
-    ASSERT_EQ(result, expected);
+    a.value = 1;
+    b.value = 1;
+    HalfAdder(&a, &b, &res_bit2);
+    union bit2_u expected = { .value = 2 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_000) {
     // a=0, b=0, c=0
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b00u };
-    ASSERT_EQ(result, expected);
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 0 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_100) {
     // a=1, b=0, c=0
-    a.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b01u };
-    ASSERT_EQ(result, expected);
+    a.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 1 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_010) {
     // a=0, b=1, c=0
-    b.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b01u };
-    ASSERT_EQ(result, expected);
+    b.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 1 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_001) {
     // a=0, b=0, c=1
-    c.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b01u };
-    ASSERT_EQ(result, expected);
+    c.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 1 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_110) {
     // a=1, b=1, c=0
-    a.set();
-    b.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b10u };
-    ASSERT_EQ(result, expected);
+    a.value = 1;
+    b.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 2 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_101) {
     // a=1, b=0, c=1
-    a.set();
-    c.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b10u };
-    ASSERT_EQ(result, expected);
+    a.value = 1;
+    c.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 2 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_011) {
     // a=0, b=1, c=1
-    b.set();
-    c.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b10u };
-    ASSERT_EQ(result, expected);
+    b.value = 1;
+    c.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 2 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, FullAdder_in_111) {
     // a=1, b=1, c=1
-    a.set();
-    b.set();
-    c.set();
-    bit2 result{ FullAdder(a, b, c) };
-    bit2 expected{ 0b11u };
-    ASSERT_EQ(result, expected);
+    a.value = 1;
+    b.value = 1;
+    c.value = 1;
+    FullAdder(&a, &b, &c, &res_bit2);
+    union bit2_u expected = { .value = 3 };
+    ASSERT_EQ(res_bit2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, Add16) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
-    byte2 result{ Add16(a16, b16) };
-    byte2 expected{ 0b0000'0000'1111'1111u };
-    ASSERT_EQ(result, expected);
+    Add16(&a16, &b16, &res_byte2);
+    union byte2_u expected = { .value = 255 };
+    ASSERT_EQ(res_byte2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, Inc16) {
     // a16=0000'0000'1111'0000
-    byte2 result{ Inc16(a16) };
-    byte2 expected{ 0b0000'0000'1111'0001u };
-    ASSERT_EQ(result, expected);
+    Inc16(&a16, &res_byte2);
+    union byte2_u expected = { .value = 241 };
+    ASSERT_EQ(res_byte2.value, expected.value);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_0) {
@@ -142,14 +151,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_0) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=0, zb=1, nb=0, f=1, no=0
-    za.set();
-    zb.set();
-    f.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'0000'0000u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 1);
-    ASSERT_EQ(ng[0], 0);
+    za.value = 1;
+    zb.value = 1;
+    f.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 0 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 1);
+    ASSERT_EQ(ng.value, 0);
 }
  
 TEST_F(ArithmeticChipsTest, ALU_out_1) {
@@ -157,17 +166,17 @@ TEST_F(ArithmeticChipsTest, ALU_out_1) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=1, nb=1, f=1, no=1
-    za.set();
-    na.set();
-    zb.set();
-    nb.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'0000'0001u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    za.value = 1;
+    na.value = 1;
+    zb.value = 1;
+    nb.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 1 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_neg_1) {
@@ -175,15 +184,15 @@ TEST_F(ArithmeticChipsTest, ALU_out_neg_1) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=1, nb=0, f=1, no=0
-    za.set();
-    na.set();
-    zb.set();
-    f.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b1111'1111'1111'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 1);
+    za.value = 1;
+    na.value = 1;
+    zb.value = 1;
+    f.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 65535 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 1);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a) {
@@ -191,13 +200,13 @@ TEST_F(ArithmeticChipsTest, ALU_out_a) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=1, nb=1, f=0, no=0
-    zb.set();
-    nb.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'1111'0000u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    zb.value = 1;
+    nb.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 240 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_b) {
@@ -205,13 +214,13 @@ TEST_F(ArithmeticChipsTest, ALU_out_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=0, nb=0, f=0, no=0
-    za.set();
-    na.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'0000'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    za.value = 1;
+    na.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 15 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_not_a) {
@@ -219,14 +228,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_not_a) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=1, nb=1, f=0, no=1
-    zb.set();
-    nb.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b1111'1111'0000'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 1);
+    zb.value = 1;
+    nb.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 65295 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 1);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_not_b) {
@@ -234,14 +243,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_not_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=0, nb=0, f=0, no=1
-    za.set();
-    na.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b1111'1111'1111'0000u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 1);
+    za.value = 1;
+    na.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 65520 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 1);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_neg_a) {
@@ -249,15 +258,15 @@ TEST_F(ArithmeticChipsTest, ALU_out_neg_a) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=1, nb=1, f=1, no=1
-    zb.set();
-    nb.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b1111'1111'0001'0000u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 1);
+    zb.value = 1;
+    nb.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 65296 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 1);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_neg_b) {
@@ -265,15 +274,15 @@ TEST_F(ArithmeticChipsTest, ALU_out_neg_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=0, nb=0, f=1, no=1
-    za.set();
-    na.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b1111'1111'1111'0001u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 1);
+    za.value = 1;
+    na.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 65521 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 1);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a_plus_1) {
@@ -281,16 +290,16 @@ TEST_F(ArithmeticChipsTest, ALU_out_a_plus_1) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=1, zb=1, nb=1, f=1, no=1
-    na.set();
-    zb.set();
-    nb.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'1111'0001u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    na.value = 1;
+    zb.value = 1;
+    nb.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 241 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_b_plus_1) {
@@ -298,16 +307,16 @@ TEST_F(ArithmeticChipsTest, ALU_out_b_plus_1) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=0, nb=1, f=1, no=1
-    za.set();
-    na.set();
-    nb.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'0001'0000u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    za.value = 1;
+    na.value = 1;
+    nb.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 16 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a_minus_1) {
@@ -315,14 +324,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_a_minus_1) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=1, nb=1, f=1, no=0
-    zb.set();
-    nb.set();
-    f.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'1110'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    zb.value = 1;
+    nb.value = 1;
+    f.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 239 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_b_minus_1) {
@@ -330,14 +339,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_b_minus_1) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=1, na=1, zb=0, nb=0, f=1, no=0
-    za.set();
-    na.set();
-    f.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'0000'1110u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    za.value = 1;
+    na.value = 1;
+    f.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 14 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a_plus_b) {
@@ -345,12 +354,12 @@ TEST_F(ArithmeticChipsTest, ALU_out_a_plus_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=0, nb=0, f=1, no=0
-    f.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'1111'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    f.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 255 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a_minus_b) {
@@ -358,14 +367,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_a_minus_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=1, zb=0, nb=0, f=1, no=1
-    na.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'1110'0001u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    na.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 225 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_b_minus_a) {
@@ -373,14 +382,14 @@ TEST_F(ArithmeticChipsTest, ALU_out_b_minus_a) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=0, nb=1, f=1, no=1
-    nb.set();
-    f.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b1111'1111'0001'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 1);
+    nb.value = 1;
+    f.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 65311 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 1);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a_and_b) {
@@ -388,11 +397,11 @@ TEST_F(ArithmeticChipsTest, ALU_out_a_and_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=0, zb=0, nb=0, f=0, no=0
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'0000'0000u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 1);
-    ASSERT_EQ(ng[0], 0);
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 0 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 1);
+    ASSERT_EQ(ng.value, 0);
 }
 
 TEST_F(ArithmeticChipsTest, ALU_out_a_or_b) {
@@ -400,12 +409,12 @@ TEST_F(ArithmeticChipsTest, ALU_out_a_or_b) {
     // a16=0000'0000'1111'0000
     // b16=0000'0000'0000'1111
     // za=0, na=1, zb=0, nb=1, f=0, no=1
-    na.set();
-    nb.set();
-    no.set();
-    byte2 result{ ALU(a16, b16, za, na, zb, nb, f, no, zr, ng) };
-    byte2 expected{ 0b0000'0000'1111'1111u };
-    ASSERT_EQ(result, expected);
-    ASSERT_EQ(zr[0], 0);
-    ASSERT_EQ(ng[0], 0);
+    na.value = 1;
+    nb.value = 1;
+    no.value = 1;
+    ALU(&a16, &b16, &za, &na, &zb, &nb, &f, &no, &zr, &ng, &res_byte2);
+    union byte2_u expected = { .value = 255 };
+    ASSERT_EQ(res_byte2.value, expected.value);
+    ASSERT_EQ(zr.value, 0);
+    ASSERT_EQ(ng.value, 0);
 }

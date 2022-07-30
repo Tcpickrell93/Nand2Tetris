@@ -3,176 +3,207 @@
 #include "bits.h"
 
 
-union bit2_u* HalfAdder(union bit1_u *a, 
-                        union bit1_u *b) {
-    /* Returns [carry, sum] in bits (sum=LSB) */
-    union bit2_u result = { .value = 0 };
-    result.bit2_s.val0 = Xor(a, b)->value;
-    result.bit2_s.val1 = And(a, b)->value;
-
-    return &result;
+void HalfAdder(union bit1_u *a, 
+               union bit1_u *b,
+               union bit2_u *result) {
+    /* 
+    a       b       sum     carry
+    -----------------------------
+    0       0       0       0
+    0       1       1       0
+    1       0       1       0
+    1       1       0       0
+    
+    Returns [carry, sum] in bits (sum=LSB) 
+    */
+    union bit1_u temp_res = { .value = 0 };
+    // Sum value can be determined from Xor of a and b
+    Xor(a, b, &temp_res);
+    result->bit2_s.val0 = temp_res.value;
+    // Carry value can be determined from And of a and b
+    And(a, b, &temp_res);
+    result->bit2_s.val1 = temp_res.value;
 }
 
-union bit2_u* FullAdder(union bit1_u *a, 
-                        union bit1_u *b, 
-                        union bit1_u *c) {
-    /* Returns [carry, sum] in bits (sum=LSB) */
-    union bit2_u* half_res = HalfAdder(a, b);
-    union bit1_u half_res_0 = { .value = half_res->bit2_s.val0 };
-    union bit1_u half_res_1 = { .value = half_res->bit2_s.val1 };
-    union bit2_u* result = HalfAdder(&half_res_0, c);
-    union bit1_u result_1 = { .value = result->bit2_s.val1 };
-    result->bit2_s.val1 = Or(&half_res_1, &result_1)->value;
+void FullAdder(union bit1_u *a, 
+               union bit1_u *b, 
+               union bit1_u *c,
+               union bit2_u *result) {
+    /* 
+    a       b       c       sum     carry
+    -------------------------------------
+    0       0       0       0       0
+    0       0       1       1       0
+    0       1       0       1       0
+    0       1       1       0       1
+    1       0       0       1       0
+    1       0       1       0       1
+    1       1       0       0       1
+    1       1       1       1       1
 
-    return result;
+    Returns [carry, sum] in bits (sum=LSB) 
+    */
+    result->value = 0;
+    union bit2_u temp_res = { .value = 0 };
+    // Perform half adder with a and b
+    HalfAdder(a, b, &temp_res);
+    union bit1_u temp_res_0 = { .value = temp_res.bit2_s.val0 };
+    union bit1_u temp_res_1 = { .value = temp_res.bit2_s.val1 };
+    // Perform half adder with carry from first half adder and carry from full adder
+    HalfAdder(&temp_res_0, c, result);
+    union bit1_u result_1 = { .value = result->bit2_s.val1 };
+    Or(&temp_res_1, &result_1, &temp_res_0); // reuse temp_res_0
+    result->bit2_s.val1 = temp_res_0.value;
 }
     
-union byte2_u* Add16(union byte2_u *a, 
-                     union byte2_u *b) {
-    union byte2_u sum = { .value = 0 };
+void Add16(union byte2_u *a, 
+           union byte2_u *b,
+           union byte2_u *result) {
+    result->value = 0;
     union bit1_u carry = { .value = 0 };
+    union bit2_u temp_res = { .value = 0 };
+
     union bit1_u a_bit = { .value = a->byte2_s.val0 };
     union bit1_u b_bit = { .value = b->byte2_s.val0 };
-    union bit2_u* temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val0 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val0 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val1;
     b_bit.bit1_s.val = b->byte2_s.val1; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val1 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val1 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val2;
     b_bit.bit1_s.val = b->byte2_s.val2; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val2 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val2 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val3;
     b_bit.bit1_s.val = b->byte2_s.val3; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val3 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val3 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val4;
     b_bit.bit1_s.val = b->byte2_s.val4; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val4 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val4 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val5;
     b_bit.bit1_s.val = b->byte2_s.val5; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val5 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val5 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val6;
     b_bit.bit1_s.val = b->byte2_s.val6; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val6 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val6 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val7;
     b_bit.bit1_s.val = b->byte2_s.val7; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val7 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val7 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val8;
     b_bit.bit1_s.val = b->byte2_s.val8; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val8 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val8 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val9;
     b_bit.bit1_s.val = b->byte2_s.val9; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val9 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val9 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val10;
     b_bit.bit1_s.val = b->byte2_s.val10; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val10 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val10 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val11;
     b_bit.bit1_s.val = b->byte2_s.val11; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val11 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val11 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val12;
     b_bit.bit1_s.val = b->byte2_s.val12; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val12 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val12 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val13;
     b_bit.bit1_s.val = b->byte2_s.val13; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val13 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val13 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val14;
     b_bit.bit1_s.val = b->byte2_s.val14; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val14 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val14 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 
     a_bit.bit1_s.val = a->byte2_s.val15;
     b_bit.bit1_s.val = b->byte2_s.val15; 
-    temp_res = FullAdder(&a_bit, &b_bit, &carry);
-    sum.byte2_s.val15 = temp_res->bit2_s.val0;
-    carry.bit1_s.val = temp_res->bit2_s.val1;
-
-    return &sum;
+    FullAdder(&a_bit, &b_bit, &carry, &temp_res);
+    result->byte2_s.val15 = temp_res.bit2_s.val0;
+    carry.bit1_s.val = temp_res.bit2_s.val1;
 }
     
-union byte2_u* Inc16(union byte2_u *a) {
+void Inc16(union byte2_u *a,
+           union byte2_u *result) {
     union byte2_u increment = { .value = 1 };
-    return Add16(a, &increment);
+    Add16(a, &increment, result);
 }
 
-union byte2_u* ALU(union byte2_u *a, 
-                   union byte2_u *b, 
-                   union bit1_u *za, 
-                   union bit1_u *na,
-                   union bit1_u *zb, 
-                   union bit1_u *nb, 
-                   union bit1_u *f, 
-                   union bit1_u *no,
-                   union bit1_u *zr, 
-                   union bit1_u *ng) {
-    union byte2_u a_copy = *a;
-    union byte2_u b_copy = *b;
-    union byte2_u output = { .value = 0 };
+void ALU(union byte2_u *a, 
+         union byte2_u *b, 
+         union bit1_u *za, 
+         union bit1_u *na,
+         union bit1_u *zb, 
+         union bit1_u *nb, 
+         union bit1_u *f, 
+         union bit1_u *no,
+         union bit1_u *zr, 
+         union bit1_u *ng,
+         union byte2_u *result) {
+    result->value = 0;
+    union byte2_u a_copy = { .value = a->value };
+    union byte2_u b_copy = { .value = b->value };
     if (za->value == 1) {
         a_copy.value = 0;
     }
     if (na->value == 1) {
-        a_copy.value = Not16(&a_copy)->value;
+        Not16(&a_copy, &a_copy);
     }
     if (zb->value == 1) {
         b_copy.value = 0;
     }
     if (nb->value == 1) {
-        b_copy.value = Not16(&b_copy)->value;
+        Not16(&b_copy, &b_copy);
     }
     if (f->value == 1) {
-        output.value = Add16(&a_copy, &b_copy)->value;
+        Add16(&a_copy, &b_copy, result);
     } else {
-        output.value = And16(&a_copy, &b_copy)->value;
+        And16(&a_copy, &b_copy, result);
     }
     if (no->value == 1) {
-        output.value = Not16(&output)->value;
+        Not16(result, result);
     }
-    if (output.value == 0) {
+    if (result->value == 0) {
         zr->bit1_s.val = 1;
     }
-    if (output.byte2_s.val15 == 1) {
+    if (result->byte2_s.val15 == 1) {
         ng->bit1_s.val = 1;
     }
-    return &output;
 }
