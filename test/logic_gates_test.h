@@ -8,29 +8,29 @@ extern "C"
 
 class LogicGatesTest : public ::testing::Test {
     protected:
-        bit1_u a = { .value = 0 };
-        bit1_u b = { .value = 0 };
+        union bit1_u a = { .value = 0 };
+        union bit1_u b = { .value = 0 };
 
-        bit1_u res_bit1 = { .value = 0 };
-        bit2_u res_bit2 = { .value = 0 };
-        bit4_u res_bit4 = { .value = 0 };
-        byte1_u res_byte1 = { .value = 0 };
-        byte2_u res_byte2 = { .value = 0 };
+        union bit1_u res_bit1 = { .value = 0 };
+        union bit2_u res_bit2 = { .value = 0 };
+        union bit4_u res_bit4 = { .value = 0 };
+        union byte1_u res_byte1 = { .value = 0 };
+        union byte2_u res_byte2 = { .value = 0 };
 
-        bit1_u sel = { .value = 0 };
-        bit2_u sel2 = { .value = 0 };
-        bit3_u sel3 = { .value = 0 };
+        union bit1_u sel = { .value = 0 };
+        union bit2_u sel2 = { .value = 0 };
+        union bit3_u sel3 = { .value = 0 };
 
-        byte1_u a8 = { .value = 0 };
+        union byte1_u a8 = { .value = 0 };
 
-        byte2_u a16 = { .value = 0 };
-        byte2_u b16 = { .value = 65535 };
-        byte2_u c16 = { .value = 65280 };
-        byte2_u d16 = { .value = 255 };
-        byte2_u e16 = { .value = 61440 };
-        byte2_u f16 = { .value = 3840 };
-        byte2_u g16 = { .value = 240 };
-        byte2_u h16 = { .value = 15 };
+        union byte2_u a16 = { .value = 0 };
+        union byte2_u b16 = { .value = 65535 };
+        union byte2_u c16 = { .value = 65280 };
+        union byte2_u d16 = { .value = 255 };
+        union byte2_u e16 = { .value = 61440 };
+        union byte2_u f16 = { .value = 3840 };
+        union byte2_u g16 = { .value = 240 };
+        union byte2_u h16 = { .value = 15 };
 };
 
 TEST_F(LogicGatesTest, Nand) {
