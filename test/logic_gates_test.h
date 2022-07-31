@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <tuple>
 
 extern "C" 
 {
@@ -33,141 +34,178 @@ class LogicGatesTest : public ::testing::Test {
         union byte2_u h16 = { .value = 15 };
 };
 
-TEST_F(LogicGatesTest, Nand) {
-    // a=0, b=0
-    Nand(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+class NandTrue : public LogicGatesTest, 
+                 public testing::WithParamInterface<std::tuple<int, int>> {
+};
 
-    // a=1, b=0
-    a.value = 1;
-    Nand(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
-
-    // a=1, b=1
-    b.value = 1;
-    Nand(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
-
-    // a=0, b=1
-    a.value = 0;
+TEST_P(NandTrue, ReturnsTrueForNand) {
+    a.value = std::get<0>(GetParam());
+    b.value = std::get<1>(GetParam());
     Nand(&a, &b, &res_bit1);
     ASSERT_TRUE(res_bit1.value);
 }
 
+INSTANTIATE_TEST_SUITE_P(NandTrueParameterized,
+                         NandTrue,
+                         testing::Values(
+                             std::make_tuple(0, 0),
+                             std::make_tuple(0, 1),
+                             std::make_tuple(1, 0)
+                         )
+);
 
-TEST_F(LogicGatesTest, Not) {
+TEST_F(LogicGatesTest, ReturnsFalseForNand) {
+    // a=1, b=1
+    a.value = 1;
+    b.value = 1;
+    Nand(&a, &b, &res_bit1);
+    ASSERT_FALSE(res_bit1.value);
+}
+
+TEST_F(LogicGatesTest, ReturnsTrueForNot) {
     // a=0
     Not(&a, &res_bit1);
     ASSERT_TRUE(res_bit1.value);
+}
 
+TEST_F(LogicGatesTest, ReturnsFalseForNot) {
     // a=1
     a.value = 1;
     Not(&a, &res_bit1);
     ASSERT_FALSE(res_bit1.value);
 }
 
-TEST_F(LogicGatesTest, And) {
-    // a=0, b=0
-    And(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+class AndFalse : public LogicGatesTest, 
+                public testing::WithParamInterface<std::tuple<int, int>> {
+};
 
-    // a=1, b=0
-    a.value = 1;
-    And(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
-
-    // a=1, b=1
-    b.value = 1;
-    And(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
-
-    // a=0, b=1
-    a.value = 0;
+TEST_P(AndFalse, ReturnsFalseForAnd) {
+    a.value = std::get<0>(GetParam());
+    b.value = std::get<1>(GetParam());
     And(&a, &b, &res_bit1);
     ASSERT_FALSE(res_bit1.value);
 }
 
-TEST_F(LogicGatesTest, Or) {
-    // a=0, b=0
-    Or(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+INSTANTIATE_TEST_SUITE_P(AndFalseParameterized,
+                         AndFalse,
+                         testing::Values(
+                             std::make_tuple(0, 0),
+                             std::make_tuple(0, 1),
+                             std::make_tuple(1, 0)
+                         )
+);
 
-    // a=1, b=0
-    a.value = 1;
-    Or(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
-
+TEST_F(LogicGatesTest, ReturnsTrueForAnd) {
     // a=1, b=1
+    a.value = 1;
     b.value = 1;
-    Or(&a, &b, &res_bit1);
+    And(&a, &b, &res_bit1);
     ASSERT_TRUE(res_bit1.value);
+}
 
-    // a=0, b=1
-    a.value = 0;
+class OrTrue : public LogicGatesTest, 
+               public testing::WithParamInterface<std::tuple<int, int>> {
+};
+
+TEST_P(OrTrue, ReturnsTrueForOr) {
+    a.value = std::get<0>(GetParam());
+    b.value = std::get<1>(GetParam());
     Or(&a, &b, &res_bit1);
     ASSERT_TRUE(res_bit1.value);
 }
 
-TEST_F(LogicGatesTest, Xor) {
+INSTANTIATE_TEST_SUITE_P(OrTrueParameterized,
+                         OrTrue,
+                         testing::Values(
+                             std::make_tuple(0, 1),
+                             std::make_tuple(1, 0),
+                             std::make_tuple(1, 1)
+                         )
+);
+
+TEST_F(LogicGatesTest, ReturnsFalseForOr) {
     // a=0, b=0
-    Xor(&a, &b, &res_bit1);
+    Or(&a, &b, &res_bit1);
     ASSERT_FALSE(res_bit1.value);
+}
 
-    // a=1, b=0
-    a.value = 1;
-    Xor(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+class XorTrue : public LogicGatesTest, 
+                public testing::WithParamInterface<std::tuple<int, int>> {
+};
 
-    // a=1, b=1
-    b.value = 1;
-    Xor(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
-
-    // a=0, b=1
-    a.value = 0;
+TEST_P(XorTrue, ReturnsTrueForXor) {
+    a.value = std::get<0>(GetParam());
+    b.value = std::get<1>(GetParam());
     Xor(&a, &b, &res_bit1);
     ASSERT_TRUE(res_bit1.value);
 }
+
+INSTANTIATE_TEST_SUITE_P(XorTrueParameterized,
+                         XorTrue,
+                         testing::Values(
+                             std::make_tuple(0, 1),
+                             std::make_tuple(1, 0)
+                         )
+);
+
+class XorFalse : public LogicGatesTest, 
+                 public testing::WithParamInterface<std::tuple<int, int>> {
+};
+
+TEST_P(XorFalse, ReturnsFalseForXor) {
+    a.value = std::get<0>(GetParam());
+    b.value = std::get<1>(GetParam());
+    Xor(&a, &b, &res_bit1);
+    ASSERT_FALSE(res_bit1.value);
+}
+
+INSTANTIATE_TEST_SUITE_P(XorFalseParameterized,
+                         XorFalse,
+                         testing::Values(
+                             std::make_tuple(0, 0),
+                             std::make_tuple(1, 1)
+                         )
+);
 
 TEST_F(LogicGatesTest, Mux) {
     // a=0, b=0, sel=0
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+    union bit1_u* result = Mux(&a, &b, &sel);
+    ASSERT_FALSE(result->value);
     
     // a=0, b=0, sel=1
     sel.value = 1;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_FALSE(result->value);
 
     // a=1, b=0, sel=1
     a.value = 1;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_FALSE(result->value);
 
     // a=1, b=0, sel=0
     sel.value = 0;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_TRUE(result->value);
 
     // a=1, b=1, sel=0
     b.value = 1;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_TRUE(result->value);
 
     // a=1, b=1, sel=1
     sel.value = 1;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_TRUE(result->value);
 
     // a=0, b=1, sel=1
     a.value = 0;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_TRUE(result->value);
 
     // a=0, b=1, sel=0
     sel.value = 0;
-    Mux(&a, &b, &sel, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+    result = Mux(&a, &b, &sel);
+    ASSERT_FALSE(result->value);
 }
 
 TEST_F(LogicGatesTest, DMux) {
@@ -274,15 +312,15 @@ TEST_F(LogicGatesTest, Mux16) {
     // sel=0
     b16.value = 0;
     a16.value = 65535;
-    Mux16(&a16, &b16, &sel, &res_byte2);
-    ASSERT_EQ(res_byte2.value, a16.value);
+    union byte2_u* result = Mux16(&a16, &b16, &sel);
+    ASSERT_EQ(result->value, a16.value);
 
     // a16=1111'1111'1111'1111
     // b16=0000'0000'0000'0000
     // sel=1
     sel.value = 1;
-    Mux16(&a16, &b16, &sel, &res_byte2);
-    ASSERT_EQ(res_byte2.value, b16.value);
+    result = Mux16(&a16, &b16, &sel);
+    ASSERT_EQ(result->value, b16.value);
 }
 
 TEST_F(LogicGatesTest, Or8Way) {
@@ -302,24 +340,24 @@ TEST_F(LogicGatesTest, Mux4Way16) {
     // d16=0000'0000'1111'1111
 
     // sel2=00
-    Mux4Way16(&a16, &b16, &c16, &d16, &sel2, &res_byte2);
-    ASSERT_EQ(res_byte2.value, a16.value);
+    union byte2_u* result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2);
+    ASSERT_EQ(result->value, a16.value);
 
     // sel2=01
     sel2.bit2_s.val0 = 1;
-    Mux4Way16(&a16, &b16, &c16, &d16, &sel2, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, b16.value);
+    result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
+    ASSERT_EQ(result->value, b16.value);
 
     // sel2=10
     sel2.bit2_s.val0 = 0;
     sel2.bit2_s.val1 = 1;
-    Mux4Way16(&a16, &b16, &c16, &d16, &sel2, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, c16.value);
+    result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
+    ASSERT_EQ(result->value, c16.value);
     
     // sel2=11
     sel2.bit2_s.val0 = 1;
-    Mux4Way16(&a16, &b16, &c16, &d16, &sel2, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, d16.value);
+    result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
+    ASSERT_EQ(result->value, d16.value);
 }
 
 TEST_F(LogicGatesTest, Mux8Way16) {
@@ -333,47 +371,47 @@ TEST_F(LogicGatesTest, Mux8Way16) {
     // h16=0000'0000'0000'1111
 
     // sel3=000
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2);
-    ASSERT_EQ(res_byte2.value, a16.value);
+    union byte2_u* result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3);
+    ASSERT_EQ(result->value, a16.value);
 
     // sel3=001
     sel3.bit3_s.val0 = 1;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, b16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, b16.value);
 
     // sel3=010
     sel3.bit3_s.val0 = 0;
     sel3.bit3_s.val1 = 1;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, c16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, c16.value);
 
     // sel3=011
     sel3.bit3_s.val0 = 1;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, d16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, d16.value);
 
     // sel3=100
     sel3.bit3_s.val2 = 1;
     sel3.bit3_s.val1 = 0;
     sel3.bit3_s.val0 = 0;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, e16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, e16.value);
 
     // sel3=101
     sel3.bit3_s.val0 = 1;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, f16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, f16.value);
 
     // sel3=110
     sel3.bit3_s.val1 = 1;
     sel3.bit3_s.val0 = 0;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, g16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, g16.value);
 
     // sel3=111
     sel3.bit3_s.val0 = 1;
-    Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3, &res_byte2); 
-    ASSERT_EQ(res_byte2.value, h16.value);
+    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(result->value, h16.value);
 }
 
 TEST_F(LogicGatesTest, DMux4Way) {
