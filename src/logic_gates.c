@@ -283,11 +283,8 @@ union byte2_u* Mux16(union byte2_u *a,
                      union byte2_u *b, 
                      union bit1_u *sel) {
     /* 16-bit Multiplexor */
-    if (sel->value == 0) { 
-        return a;
-    } else {
-        return b;
-    }
+    if (sel->value == 0) { return a; }
+    return b;
 }
 
 void Or8Way(union byte1_u *a,
