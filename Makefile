@@ -1,7 +1,7 @@
 GOOGLE_TEST_LIB := gtest
 GOOGLE_TEST_INCLUDE := /usr/include
 
-G++_COMPILE_FLAGS := -c -I ${GOOGLE_TEST_INCLUDE} -fmax-errors=1
+G++_COMPILE_FLAGS := -g -c -I ${GOOGLE_TEST_INCLUDE} -fmax-errors=1
 G++_LINKING_FLAGS := -L /usr/lib -l ${GOOGLE_TEST_LIB} -l pthread
 
 SRC_DIR := ./src
@@ -10,19 +10,19 @@ TEST_DIR := ./test
 TEST_BUILD_DIR := ${TEST_DIR}/build
 BIN_DIR := ./bin
 SRCS := $(shell find $(SRC_DIR) -name '*.cpp' -or -name '*.c' -or -name '*.s')
-$(info $$SRCS is [${SRCS}])
+#$(info $$SRCS is [${SRCS}])
 SRC_OBJS := $(SRCS:${SRC_DIR}/%=$(SRC_BUILD_DIR)/%.o)
-$(info $$SRC_OBJS is [${SRC_OBJS}])
+#$(info $$SRC_OBJS is [${SRC_OBJS}])
 SRC_INCS := ${shell find $(SRC_DIR) -name '*.h'}
-$(info $$SRC_INCS is [${SRC_INCS}])
+#$(info $$SRC_INCS is [${SRC_INCS}])
 SRC_LIB := $(SRCS:${SRC_DIR}/%=$(SRC_BUILD_DIR)/%.a)
-$(info $$SRC_LIB is [${SRC_LIB}])
+#$(info $$SRC_LIB is [${SRC_LIB}])
 TESTS := ${shell find $(TEST_DIR) -name '*.cpp' -or -name '*.c' -or -name '*.s'}
-$(info $$TESTS is [${TESTS}])
+#$(info $$TESTS is [${TESTS}])
 TEST_OBJS := $(TESTS:${TEST_DIR}/%=$(TEST_BUILD_DIR)/%.o)
-$(info $$TEST_OBJS is [${TEST_OBJS}])
+#$(info $$TEST_OBJS is [${TEST_OBJS}])
 TEST_INCS := ${shell find $(TEST_DIR) -name '*.h'}
-$(info $$TEST_INCS is [${TEST_INCS}])
+#$(info $$TEST_INCS is [${TEST_INCS}])
 
 EXECUTABLE := TestAll.exe
 
