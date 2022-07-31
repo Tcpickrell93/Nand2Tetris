@@ -1,8 +1,6 @@
 #include "logic_gates.h"
 #include "bits.h"
 
-#include <stdio.h>
-
 
 void Nand(union bit1_u *a, 
           union bit1_u *b,
@@ -50,15 +48,14 @@ void Xor(union bit1_u *a,
     Or(&temp_a, &temp_b, result);
 }
 
-void Mux(union bit1_u *a, 
-         union bit1_u *b, 
-         union bit1_u *sel,
-         union bit1_u *result) {
+union bit1_u* Mux(union bit1_u *a, 
+                  union bit1_u *b, 
+                  union bit1_u *sel) {
     /* 2-bit Multiplexor */
     if (sel->bit1_s.val == 0) { 
-        result->value = a->value; 
+        return a;
     } else {
-        result->value = b->value; 
+        return b;
     }
 }
 
@@ -83,7 +80,7 @@ void AndMuxOr(union bit1_u *a,
     And(a, b, &temp_and);
     union bit1_u temp_or = { .value = 0 };
     Or(a, b, &temp_or);
-    Mux(&temp_and, &temp_or, sel, result);
+    result->value = Mux(&temp_and, &temp_or, sel)->value;
 }
 
 void Not16(union byte2_u *a,
@@ -282,15 +279,14 @@ void Or16(union byte2_u *a,
     result->byte2_s.val15 = res_bit.value;
 }
 
-void Mux16(union byte2_u *a, 
-           union byte2_u *b, 
-           union bit1_u *sel,
-           union byte2_u *result) {
+union byte2_u* Mux16(union byte2_u *a, 
+                     union byte2_u *b, 
+                     union bit1_u *sel) {
     /* 16-bit Multiplexor */
     if (sel->value == 0) { 
-        result->value = a->value; 
+        return a;
     } else {
-        result->value = b->value; 
+        return b;
     }
 }
 
@@ -300,49 +296,39 @@ void Or8Way(union byte1_u *a,
     result->value = (a->value > 0);
 }
 
-void Mux4Way16(union byte2_u *a, 
-               union byte2_u *b,
-               union byte2_u *c, 
-               union byte2_u *d, 
-               union bit2_u *sel,
-               union byte2_u *result) {
+union byte2_u* Mux4Way16(union byte2_u *a, 
+                         union byte2_u *b,
+                         union byte2_u *c, 
+                         union byte2_u *d, 
+                         union bit2_u *sel) {
     /* 16-bit 4-Way Multiplexor */
     union bit1_u sel_0 = { .value = sel->bit2_s.val0 };
     union bit1_u sel_1 = { .value = sel->bit2_s.val1 };
-    union byte2_u ab_res;
-    Mux16(a, b, &sel_0, &ab_res);
-    union byte2_u cd_res;
-    Mux16(c, d, &sel_0, &cd_res);
-    Mux16(&ab_res, &cd_res, &sel_1, result);
+    union byte2_u* ab_res = Mux16(a, b, &sel_0);
+    union byte2_u* cd_res = Mux16(c, d, &sel_0);
+    return Mux16(ab_res, cd_res, &sel_1);
 }
 
-void Mux8Way16(union byte2_u *a, 
-               union byte2_u *b,
-               union byte2_u *c, 
-               union byte2_u *d,
-               union byte2_u *e, 
-               union byte2_u *f, 
-               union byte2_u *g, 
-               union byte2_u *h, 
-               union bit3_u *sel,
-               union byte2_u *result) {
+union byte2_u* Mux8Way16(union byte2_u *a, 
+                         union byte2_u *b,
+                         union byte2_u *c, 
+                         union byte2_u *d,
+                         union byte2_u *e, 
+                         union byte2_u *f, 
+                         union byte2_u *g, 
+                         union byte2_u *h, 
+                         union bit3_u *sel) {
     /* 16-bit 8-Way Multiplexor */
     union bit1_u sel_0 = { .value = sel->bit3_s.val0 };
     union bit1_u sel_1 = { .value = sel->bit3_s.val1 };
     union bit1_u sel_2 = { .value = sel->bit3_s.val2 };
-    union byte2_u ab_res;
-    Mux16(a, b, &sel_0, &ab_res);
-    union byte2_u cd_res;
-    Mux16(c, d, &sel_0, &cd_res);
-    union byte2_u abcd_res;
-    Mux16(&ab_res, &cd_res, &sel_1, &abcd_res);
-    union byte2_u ef_res;
-    Mux16(e, f, &sel_0, &ef_res);
-    union byte2_u gh_res;
-    Mux16(g, h, &sel_0, &gh_res);
-    union byte2_u efgh_res;
-    Mux16(&ef_res, &gh_res, &sel_1, &efgh_res);
-    Mux16(&abcd_res, &efgh_res, &sel_2, result);
+    union byte2_u* ab_res = Mux16(a, b, &sel_0);
+    union byte2_u* cd_res = Mux16(c, d, &sel_0);
+    union byte2_u* abcd_res = Mux16(ab_res, cd_res, &sel_1);
+    union byte2_u* ef_res = Mux16(e, f, &sel_0);
+    union byte2_u* gh_res = Mux16(g, h, &sel_0);
+    union byte2_u* efgh_res = Mux16(ef_res, gh_res, &sel_1);
+    return Mux16(abcd_res, efgh_res, &sel_2);
 }
 
 void DMux4Way(union bit1_u *a, 

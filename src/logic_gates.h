@@ -22,10 +22,9 @@ void Xor(union bit1_u *a,
          union bit1_u *b,
          union bit1_u *result); 
 
-void Mux(union bit1_u *a, 
-         union bit1_u *b, 
-         union bit1_u *sel,
-         union bit1_u *result); 
+union bit1_u* Mux(union bit1_u *a, 
+                  union bit1_u *b, 
+                  union bit1_u *sel);
 
 void DMux(union bit1_u *a, 
           union bit1_u *sel,
@@ -34,7 +33,7 @@ void DMux(union bit1_u *a,
 void AndMuxOr(union bit1_u *a, 
               union bit1_u *b, 
               union bit1_u *sel,
-              union bit1_u *result); 
+              union bit1_u *result);
 
 void Not16(union byte2_u *a,
            union byte2_u *result); 
@@ -47,31 +46,28 @@ void Or16(union byte2_u *a,
           union byte2_u *b,
           union byte2_u *result); 
 
-void Mux16(union byte2_u *a, 
-           union byte2_u *b, 
-           union bit1_u *sel,
-           union byte2_u *result); 
+union byte2_u* Mux16(union byte2_u *a, 
+                     union byte2_u *b, 
+                     union bit1_u *sel); 
 
 void Or8Way(union byte1_u *a,
             union byte1_u *result); 
 
-void Mux4Way16(union byte2_u *a, 
-               union byte2_u *b,
-               union byte2_u *c, 
-               union byte2_u *d, 
-               union bit2_u *sel,
-               union byte2_u *result); 
+union byte2_u* Mux4Way16(union byte2_u *a, 
+                         union byte2_u *b,
+                         union byte2_u *c, 
+                         union byte2_u *d, 
+                         union bit2_u *sel);
 
-void Mux8Way16(union byte2_u *a, 
-               union byte2_u *b,
-               union byte2_u *c, 
-               union byte2_u *d,
-               union byte2_u *e, 
-               union byte2_u *f, 
-               union byte2_u *g, 
-               union byte2_u *h, 
-               union bit3_u *sel,
-               union byte2_u *result); 
+union byte2_u* Mux8Way16(union byte2_u *a, 
+                         union byte2_u *b,
+                         union byte2_u *c, 
+                         union byte2_u *d,
+                         union byte2_u *e, 
+                         union byte2_u *f, 
+                         union byte2_u *g, 
+                         union byte2_u *h, 
+                         union bit3_u *sel); 
 
 void DMux4Way(union bit1_u *a, 
               union bit2_u *sel,
