@@ -32,467 +32,536 @@ class LogicGatesTest : public ::testing::Test {
         union byte2_u f16 = { .value = 3840 };
         union byte2_u g16 = { .value = 240 };
         union byte2_u h16 = { .value = 15 };
+
+        union bit1_u exp_bit1 = { .value = 0 };
+        union bit2_u exp_bit2 = { .value = 0 };
+        union bit4_u exp_bit4 = { .value = 0 };
+        union byte2_u exp_byte2 = { .value = 0 };
+        union byte1_u exp_byte1 = { .value = 0 };
 };
 
-class NandTrue : public LogicGatesTest, 
-                 public testing::WithParamInterface<std::tuple<int, int>> {
+/* 
+-------------------------------------------------------------------------------
+                            NAND GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class NandTest : public LogicGatesTest, 
+                 public testing::WithParamInterface<std::tuple<int, int, int>> {
 };
 
-TEST_P(NandTrue, ReturnsTrueForNand) {
+TEST_P(NandTest, ComparesNandOutputToExpected) {
     a.value = std::get<0>(GetParam());
     b.value = std::get<1>(GetParam());
+    exp_bit1.value = std::get<2>(GetParam());
     Nand(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
 }
 
-INSTANTIATE_TEST_SUITE_P(NandTrueParameterized,
-                         NandTrue,
-                         testing::Values(
-                             std::make_tuple(0, 0),
-                             std::make_tuple(0, 1),
-                             std::make_tuple(1, 0)
-                         )
+INSTANTIATE_TEST_SUITE_P(
+    NandTestParameterized,
+    NandTest,
+    testing::Values(
+        std::make_tuple(0, 0, 1),
+        std::make_tuple(0, 1, 1),
+        std::make_tuple(1, 0, 1),
+        std::make_tuple(1, 1, 0)
+    )
 );
 
-TEST_F(LogicGatesTest, ReturnsFalseForNand) {
-    // a=1, b=1
-    a.value = 1;
-    b.value = 1;
-    Nand(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
-}
+/* 
+-------------------------------------------------------------------------------
+                            NOT GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-TEST_F(LogicGatesTest, ReturnsTrueForNot) {
-    // a=0
-    Not(&a, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
-}
-
-TEST_F(LogicGatesTest, ReturnsFalseForNot) {
-    // a=1
-    a.value = 1;
-    Not(&a, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
-}
-
-class AndFalse : public LogicGatesTest, 
+class NotTest : public LogicGatesTest, 
                 public testing::WithParamInterface<std::tuple<int, int>> {
 };
 
-TEST_P(AndFalse, ReturnsFalseForAnd) {
+TEST_P(NotTest, ComparesNotOutputToExpected) {
+    a.value = std::get<0>(GetParam());
+    exp_bit1.value = std::get<1>(GetParam());
+    Not(&a, &res_bit1);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    NotTestParameterized,
+    NotTest,
+    testing::Values(
+        std::make_tuple(0, 1),
+        std::make_tuple(1, 0)
+    )
+);
+
+/* 
+-------------------------------------------------------------------------------
+                            AND GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class AndTest : public LogicGatesTest, 
+                public testing::WithParamInterface<std::tuple<int, int, int>> {
+};
+
+TEST_P(AndTest, ComparesAndOutputToExpected) {
     a.value = std::get<0>(GetParam());
     b.value = std::get<1>(GetParam());
+    exp_bit1.value = std::get<2>(GetParam());
     And(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
 }
 
-INSTANTIATE_TEST_SUITE_P(AndFalseParameterized,
-                         AndFalse,
-                         testing::Values(
-                             std::make_tuple(0, 0),
-                             std::make_tuple(0, 1),
-                             std::make_tuple(1, 0)
-                         )
+INSTANTIATE_TEST_SUITE_P(
+    AndTestParameterized,
+    AndTest,
+    testing::Values(
+        std::make_tuple(0, 0, 0),
+        std::make_tuple(0, 1, 0),
+        std::make_tuple(1, 0, 0),
+        std::make_tuple(1, 1, 1)
+    )
 );
 
-TEST_F(LogicGatesTest, ReturnsTrueForAnd) {
-    // a=1, b=1
-    a.value = 1;
-    b.value = 1;
-    And(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
-}
+/* 
+-------------------------------------------------------------------------------
+                            OR GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-class OrTrue : public LogicGatesTest, 
-               public testing::WithParamInterface<std::tuple<int, int>> {
+class OrTest : public LogicGatesTest, 
+               public testing::WithParamInterface<std::tuple<int, int, int>> {
 };
 
-TEST_P(OrTrue, ReturnsTrueForOr) {
+TEST_P(OrTest, ComparesOrOutputToExpected) {
     a.value = std::get<0>(GetParam());
     b.value = std::get<1>(GetParam());
+    exp_bit1.value = std::get<2>(GetParam());
     Or(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
 }
 
-INSTANTIATE_TEST_SUITE_P(OrTrueParameterized,
-                         OrTrue,
-                         testing::Values(
-                             std::make_tuple(0, 1),
-                             std::make_tuple(1, 0),
-                             std::make_tuple(1, 1)
-                         )
+INSTANTIATE_TEST_SUITE_P(
+    OrTestParameterized,
+    OrTest,
+    testing::Values(
+        std::make_tuple(0, 0, 0),
+        std::make_tuple(0, 1, 1),
+        std::make_tuple(1, 0, 1),
+        std::make_tuple(1, 1, 1)
+    )
 );
 
-TEST_F(LogicGatesTest, ReturnsFalseForOr) {
-    // a=0, b=0
-    Or(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
-}
+/* 
+-------------------------------------------------------------------------------
+                            XOR GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-class XorTrue : public LogicGatesTest, 
-                public testing::WithParamInterface<std::tuple<int, int>> {
+class XorTest : public LogicGatesTest, 
+                public testing::WithParamInterface<std::tuple<int, int, int>> {
 };
 
-TEST_P(XorTrue, ReturnsTrueForXor) {
+TEST_P(XorTest, ComparesXorOutputToExpected) {
     a.value = std::get<0>(GetParam());
     b.value = std::get<1>(GetParam());
+    exp_bit1.value = std::get<2>(GetParam());
     Xor(&a, &b, &res_bit1);
-    ASSERT_TRUE(res_bit1.value);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
 }
 
-INSTANTIATE_TEST_SUITE_P(XorTrueParameterized,
-                         XorTrue,
-                         testing::Values(
-                             std::make_tuple(0, 1),
-                             std::make_tuple(1, 0)
-                         )
+INSTANTIATE_TEST_SUITE_P(
+    XorTestParameterized,
+    XorTest,
+    testing::Values(
+        std::make_tuple(0, 0, 0),
+        std::make_tuple(0, 1, 1),
+        std::make_tuple(1, 0, 1),
+        std::make_tuple(1, 1, 0)
+    )
 );
 
-class XorFalse : public LogicGatesTest, 
-                 public testing::WithParamInterface<std::tuple<int, int>> {
+/* 
+-------------------------------------------------------------------------------
+                            MUX GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class MuxTest : public LogicGatesTest, 
+                public testing::WithParamInterface<std::tuple<int, int, int, int>> {
 };
 
-TEST_P(XorFalse, ReturnsFalseForXor) {
+TEST_P(MuxTest, ComparesMuxOutputToExpected) {
     a.value = std::get<0>(GetParam());
     b.value = std::get<1>(GetParam());
-    Xor(&a, &b, &res_bit1);
-    ASSERT_FALSE(res_bit1.value);
+    sel.value = std::get<2>(GetParam());
+    exp_bit1.value = std::get<3>(GetParam());
+    res_bit1 = *Mux(&a, &b, &sel);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
 }
 
-INSTANTIATE_TEST_SUITE_P(XorFalseParameterized,
-                         XorFalse,
-                         testing::Values(
-                             std::make_tuple(0, 0),
-                             std::make_tuple(1, 1)
-                         )
+INSTANTIATE_TEST_SUITE_P(
+    MuxTestParameterized,
+    MuxTest,
+    testing::Values(
+        std::make_tuple(0, 0, 0, 0),
+        std::make_tuple(0, 0, 1, 0),
+        std::make_tuple(0, 1, 0, 0),
+        std::make_tuple(0, 1, 1, 1),
+        std::make_tuple(1, 0, 0, 1),
+        std::make_tuple(1, 0, 1, 0),
+        std::make_tuple(1, 1, 0, 1),
+        std::make_tuple(1, 1, 1, 1)
+    )
 );
 
-TEST_F(LogicGatesTest, Mux) {
-    // a=0, b=0, sel=0
-    union bit1_u* result = Mux(&a, &b, &sel);
-    ASSERT_FALSE(result->value);
-    
-    // a=0, b=0, sel=1
-    sel.value = 1;
-    result = Mux(&a, &b, &sel);
-    ASSERT_FALSE(result->value);
+/* 
+-------------------------------------------------------------------------------
+                            DMUX GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // a=1, b=0, sel=1
-    a.value = 1;
-    result = Mux(&a, &b, &sel);
-    ASSERT_FALSE(result->value);
+class DMuxTest : public LogicGatesTest, 
+                 public testing::WithParamInterface<std::tuple<int, int, int, int>> {
+};
 
-    // a=1, b=0, sel=0
-    sel.value = 0;
-    result = Mux(&a, &b, &sel);
-    ASSERT_TRUE(result->value);
-
-    // a=1, b=1, sel=0
-    b.value = 1;
-    result = Mux(&a, &b, &sel);
-    ASSERT_TRUE(result->value);
-
-    // a=1, b=1, sel=1
-    sel.value = 1;
-    result = Mux(&a, &b, &sel);
-    ASSERT_TRUE(result->value);
-
-    // a=0, b=1, sel=1
-    a.value = 0;
-    result = Mux(&a, &b, &sel);
-    ASSERT_TRUE(result->value);
-
-    // a=0, b=1, sel=0
-    sel.value = 0;
-    result = Mux(&a, &b, &sel);
-    ASSERT_FALSE(result->value);
+TEST_P(DMuxTest, ComparesDMuxOutputToExpected) {
+    a.value = std::get<0>(GetParam());
+    sel.value = std::get<1>(GetParam());
+    exp_bit2.bit2_s.val1 = std::get<2>(GetParam());
+    exp_bit2.bit2_s.val0 = std::get<3>(GetParam());
+    DMux(&a, &sel, &res_bit2);
+    ASSERT_EQ(res_bit2.bit2_s.val0, exp_bit2.bit2_s.val0);
+    ASSERT_EQ(res_bit2.bit2_s.val1, exp_bit2.bit2_s.val1);
 }
 
-TEST_F(LogicGatesTest, DMux) {
-    // a=0, sel=0
-    DMux(&a, &sel, &res_bit2);
-    ASSERT_FALSE(res_bit2.bit2_s.val0);
-    ASSERT_FALSE(res_bit2.bit2_s.val1);
-    
-    // a=0, sel=1
-    sel.value = 1;
-    DMux(&a, &sel, &res_bit2);
-    ASSERT_FALSE(res_bit2.bit2_s.val0);
-    ASSERT_FALSE(res_bit2.bit2_s.val1);
+INSTANTIATE_TEST_SUITE_P(
+    DMuxTestParameterized,
+    DMuxTest,
+    testing::Values(
+        std::make_tuple(0, 0, 0, 0),
+        std::make_tuple(0, 1, 0, 0),
+        std::make_tuple(1, 0, 0, 1),
+        std::make_tuple(1, 1, 1, 0)
+    )
+);
 
-    // a=1, sel=1
-    a.value = 1;
-    DMux(&a, &sel, &res_bit2);
-    ASSERT_FALSE(res_bit2.bit2_s.val0);
-    ASSERT_TRUE(res_bit2.bit2_s.val1);
+/* 
+-------------------------------------------------------------------------------
+                            ANDMUXOR GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // a=1, sel=0
-    sel.value = 0;
-    DMux(&a, &sel, &res_bit2);
-    ASSERT_TRUE(res_bit2.bit2_s.val0);
-    ASSERT_FALSE(res_bit2.bit2_s.val1);
-}
+class AndMuxOrTest : public LogicGatesTest, 
+                     public testing::WithParamInterface<std::tuple<int, int, int, int>> {
+};
 
-TEST_F(LogicGatesTest, AndMuxOr) {
-    // a=1, b=0, sel=1
-    sel.value = 1;
-    a.value = 1;
+TEST_P(AndMuxOrTest, ComparesAndMuxOrOutputToExpected) {
+    a.value = std::get<0>(GetParam());
+    b.value = std::get<1>(GetParam());
+    sel.value = std::get<2>(GetParam());
+    exp_bit1.value = std::get<3>(GetParam());
     AndMuxOr(&a, &b, &sel, &res_bit1);
-    union bit1_u expected;
-    Or(&a, &b, &expected);
-    ASSERT_EQ(res_bit1.value, expected.value);
-
-    // a=1, b=0, sel=0
-    sel.value = 0;
-    AndMuxOr(&a, &b, &sel, &res_bit1);
-    And(&a, &b, &expected);
-    ASSERT_EQ(res_bit1.value, expected.value);
+    ASSERT_EQ(res_bit1.value, exp_bit1.value);
 }
 
-TEST_F(LogicGatesTest, Not16) {
+INSTANTIATE_TEST_SUITE_P(
+    AndMuxOrTestParameterized,
+    AndMuxOrTest,
+    testing::Values(
+        std::make_tuple(0, 0, 0, 0),
+        std::make_tuple(1, 0, 0, 0),
+        std::make_tuple(0, 1, 0, 0),
+        std::make_tuple(1, 1, 0, 1),
+        std::make_tuple(0, 0, 1, 0),
+        std::make_tuple(1, 0, 1, 1),
+        std::make_tuple(0, 1, 1, 1),
+        std::make_tuple(1, 1, 1, 1)
+    )
+);
+
+/* 
+-------------------------------------------------------------------------------
+                            NOT16 GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class Not16Test : public LogicGatesTest, 
+                  public testing::WithParamInterface<std::tuple<int, int>> {
+};
+
+TEST_P(Not16Test, ComparesNot16OutputToExpected) {
+    a16.value = std::get<0>(GetParam());
+    exp_byte2.value = std::get<1>(GetParam());
     Not16(&a16, &res_byte2);
-    ASSERT_EQ(res_byte2.value, b16.value);
+    ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
-TEST_F(LogicGatesTest, And16) {
-    // a16=0000'0000'0000'0000
-    // b16=0000'0000'0000'0000
-    b16.value = 0;
-    And16(&a16, &b16, &res_byte2);
-    ASSERT_FALSE(res_byte2.value);
+INSTANTIATE_TEST_SUITE_P(
+    Not16TestParameterized,
+    Not16Test,
+    testing::Values(
+        std::make_tuple(0, 65535),
+        std::make_tuple(65535, 0)
+    )
+);
 
-    // a16=1111'1111'1111'1111
-    // b16=0000'0000'0000'0000
-    a16.value = 65535;
-    And16(&a16, &b16, &res_byte2);
-    ASSERT_FALSE(res_byte2.value);
+/* 
+-------------------------------------------------------------------------------
+                            AND16 GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // a16=1111'1111'1111'1111
-    // b16=1111'1111'1111'1111
-    b16.value = 65535;
-    And16(&a16, &b16, &res_byte2);
-    ASSERT_EQ(res_byte2.value, 65535);
+class And16Test : public LogicGatesTest, 
+                  public testing::WithParamInterface<std::tuple<int, int, int>> {
+};
 
-    // a16=0000'0000'0000'0000
-    // b16=1111'1111'1111'1111
-    a16.value = 0;
+TEST_P(And16Test, ComparesAnd16OutputToExpected) {
+    a16.value = std::get<0>(GetParam());
+    b16.value = std::get<1>(GetParam());
+    exp_byte2.value = std::get<2>(GetParam());
     And16(&a16, &b16, &res_byte2);
-    ASSERT_FALSE(res_byte2.value);
+    ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
-TEST_F(LogicGatesTest, Or16) {
-    // a16=0000'0000'0000'0000
-    // b16=0000'0000'0000'0000
-    b16.value = 0;
-    Or16(&a16, &b16, &res_byte2);
-    ASSERT_FALSE(res_byte2.value);
+INSTANTIATE_TEST_SUITE_P(
+    And16TestParameterized,
+    And16Test,
+    testing::Values(
+        std::make_tuple(65535, 65535, 65535),
+        std::make_tuple(65535, 0, 0),
+        std::make_tuple(0, 65535, 0),
+        std::make_tuple(0, 0, 0),
+        std::make_tuple(43690, 65535, 43690)
+    )
+);
 
-    // a16=1111'1111'1111'1111
-    // b16=0000'0000'0000'0000
-    a16.value = 65535;
-    Or16(&a16, &b16, &res_byte2);
-    ASSERT_EQ(res_byte2.value, 65535);
+/* 
+-------------------------------------------------------------------------------
+                            OR16 GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // a16=1111'1111'1111'1111
-    // b16=1111'1111'1111'1111
-    b16.value = 65535;
-    Or16(&a16, &b16, &res_byte2);
-    ASSERT_EQ(res_byte2.value, 65535);
+class Or16Test : public LogicGatesTest, 
+                 public testing::WithParamInterface<std::tuple<int, int, int>> {
+};
 
-    // a16=0000'0000'0000'0000
-    // b16=1111'1111'1111'1111
-    a16.value = 0;
+TEST_P(Or16Test, ComparesOr16OutputToExpected) {
+    a16.value = std::get<0>(GetParam());
+    b16.value = std::get<1>(GetParam());
+    exp_byte2.value = std::get<2>(GetParam());
     Or16(&a16, &b16, &res_byte2);
-    ASSERT_EQ(res_byte2.value, 65535);
+    ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
-TEST_F(LogicGatesTest, Mux16) {
-    // a16=1111'1111'1111'1111
-    // b16=0000'0000'0000'0000
-    // sel=0
-    b16.value = 0;
-    a16.value = 65535;
-    union byte2_u* result = Mux16(&a16, &b16, &sel);
-    ASSERT_EQ(result->value, a16.value);
+INSTANTIATE_TEST_SUITE_P(
+    Or16TestParameterized,
+    Or16Test,
+    testing::Values(
+        std::make_tuple(65535, 65535, 65535),
+        std::make_tuple(65535, 0, 65535),
+        std::make_tuple(0, 65535, 65535),
+        std::make_tuple(0, 0, 0),
+        std::make_tuple(43690, 65535, 65535)
+    )
+);
 
-    // a16=1111'1111'1111'1111
-    // b16=0000'0000'0000'0000
-    // sel=1
-    sel.value = 1;
-    result = Mux16(&a16, &b16, &sel);
-    ASSERT_EQ(result->value, b16.value);
+/* 
+-------------------------------------------------------------------------------
+                            MUX16 GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class Mux16Test : public LogicGatesTest, 
+                  public testing::WithParamInterface<std::tuple<int, int, int, int>> {
+};
+
+TEST_P(Mux16Test, ComparesMux16OutputToExpected) {
+    a16.value = std::get<0>(GetParam());
+    b16.value = std::get<1>(GetParam());
+    sel.value = std::get<2>(GetParam());
+    exp_byte2.value = std::get<3>(GetParam());
+    res_byte2 = *Mux16(&a16, &b16, &sel);
+    ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
-TEST_F(LogicGatesTest, Or8Way) {
-    // a8=0000'0000
+INSTANTIATE_TEST_SUITE_P(
+    Mux16TestParameterized,
+    Mux16Test,
+    testing::Values(
+        std::make_tuple(0, 0, 0, 0),
+        std::make_tuple(0, 0, 1, 0),
+        std::make_tuple(0, 65535, 0, 0),
+        std::make_tuple(0, 65535, 1, 65535),
+        std::make_tuple(65535, 0, 0, 65535),
+        std::make_tuple(65535, 0, 1, 0),
+        std::make_tuple(65535, 43690, 0, 65535),
+        std::make_tuple(65535, 43690, 1, 43690)
+    )
+);
+
+/* 
+-------------------------------------------------------------------------------
+                            OR8WAY GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class Or8WayTest : public LogicGatesTest, 
+                   public testing::WithParamInterface<std::tuple<int, int>> {
+};
+
+TEST_P(Or8WayTest, ComparesOr8WayOutputToExpected) {
+    a8.value = std::get<0>(GetParam());
+    exp_byte1.value = std::get<1>(GetParam());
     Or8Way(&a8, &res_byte1);
-    ASSERT_FALSE(res_byte1.value);
-
-    a8.byte1_s.val2 = 1;
-    Or8Way(&a8, &res_byte1);
-    ASSERT_TRUE(res_byte1.value);
+    ASSERT_EQ(res_byte1.value, exp_byte1.value);
 }
 
-TEST_F(LogicGatesTest, Mux4Way16) {
-    // a16=0000'0000'0000'0000
-    // b16=1111'1111'1111'1111
-    // c16=1111'1111'0000'0000
-    // d16=0000'0000'1111'1111
+INSTANTIATE_TEST_SUITE_P(
+    Or8WayTestParameterized,
+    Or8WayTest,
+    testing::Values(
+        std::make_tuple(0, 0),
+        std::make_tuple(1, 1),
+        std::make_tuple(456, 1),
+        std::make_tuple(6851, 1),
+        std::make_tuple(65535, 1)
+    )
+);
 
-    // sel2=00
-    union byte2_u* result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2);
-    ASSERT_EQ(result->value, a16.value);
+/* 
+-------------------------------------------------------------------------------
+                            MUX4WAY16 GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // sel2=01
-    sel2.bit2_s.val0 = 1;
-    result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
-    ASSERT_EQ(result->value, b16.value);
+class Mux4Way16Test : public LogicGatesTest, 
+                      public testing::WithParamInterface<std::tuple<int, int, int, int, int, int>> {
+};
 
-    // sel2=10
-    sel2.bit2_s.val0 = 0;
-    sel2.bit2_s.val1 = 1;
-    result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
-    ASSERT_EQ(result->value, c16.value);
-    
-    // sel2=11
-    sel2.bit2_s.val0 = 1;
-    result = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
-    ASSERT_EQ(result->value, d16.value);
+TEST_P(Mux4Way16Test, ComparesMux4Way16OutputToExpected) {
+    a16.value = std::get<0>(GetParam());
+    b16.value = std::get<1>(GetParam());
+    c16.value = std::get<2>(GetParam());
+    d16.value = std::get<3>(GetParam());
+    sel2.value = std::get<4>(GetParam());
+    exp_byte2.value = std::get<5>(GetParam());
+    res_byte2 = *Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
+    ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
-TEST_F(LogicGatesTest, Mux8Way16) {
-    // a16=0000'0000'0000'0000
-    // b16=1111'1111'1111'1111
-    // c16=1111'1111'0000'0000
-    // d16=0000'0000'1111'1111
-    // e16=1111'0000'0000'0000
-    // f16=0000'1111'0000'0000
-    // g16=0000'0000'1111'0000
-    // h16=0000'0000'0000'1111
+INSTANTIATE_TEST_SUITE_P(
+    Mux4Way16TestParameterized,
+    Mux4Way16Test,
+    testing::Values(
+        std::make_tuple(0, 65535, 65280, 255, 0, 0),
+        std::make_tuple(0, 65535, 65280, 255, 1, 65535),
+        std::make_tuple(0, 65535, 65280, 255, 2, 65280),
+        std::make_tuple(0, 65535, 65280, 255, 3, 255)
+    )
+);
 
-    // sel3=000
-    union byte2_u* result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3);
-    ASSERT_EQ(result->value, a16.value);
+/* 
+-------------------------------------------------------------------------------
+                            MUX8WAY16 GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // sel3=001
-    sel3.bit3_s.val0 = 1;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, b16.value);
+class Mux8Way16Test : public LogicGatesTest, 
+                      public testing::WithParamInterface<std::tuple<int, int, int, int, int, int, int, int, int, int>> {
+};
 
-    // sel3=010
-    sel3.bit3_s.val0 = 0;
-    sel3.bit3_s.val1 = 1;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, c16.value);
-
-    // sel3=011
-    sel3.bit3_s.val0 = 1;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, d16.value);
-
-    // sel3=100
-    sel3.bit3_s.val2 = 1;
-    sel3.bit3_s.val1 = 0;
-    sel3.bit3_s.val0 = 0;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, e16.value);
-
-    // sel3=101
-    sel3.bit3_s.val0 = 1;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, f16.value);
-
-    // sel3=110
-    sel3.bit3_s.val1 = 1;
-    sel3.bit3_s.val0 = 0;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, g16.value);
-
-    // sel3=111
-    sel3.bit3_s.val0 = 1;
-    result = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(result->value, h16.value);
+TEST_P(Mux8Way16Test, ComparesMux8Way16OutputToExpected) {
+    a16.value = std::get<0>(GetParam());
+    b16.value = std::get<1>(GetParam());
+    c16.value = std::get<2>(GetParam());
+    d16.value = std::get<3>(GetParam());
+    e16.value = std::get<4>(GetParam());
+    f16.value = std::get<5>(GetParam());
+    g16.value = std::get<6>(GetParam());
+    h16.value = std::get<7>(GetParam());
+    sel3.value = std::get<8>(GetParam());
+    exp_byte2.value = std::get<9>(GetParam());
+    res_byte2 = *Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
-TEST_F(LogicGatesTest, DMux4Way) {
-    // a=1, sel2=00
-    a.value = 1;;
+INSTANTIATE_TEST_SUITE_P(
+    Mux8Way16TestParameterized,
+    Mux8Way16Test,
+    testing::Values(
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 0, 0),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 1, 65535),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 2, 65280),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 3, 255),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 4, 61440),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 5, 3840),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 6, 240),
+        std::make_tuple(0, 65535, 65280, 255, 61440, 3840, 240, 15, 7, 15)
+    )
+);
+
+/* 
+-------------------------------------------------------------------------------
+                            DMUX4WAY GATE TESTS
+-------------------------------------------------------------------------------
+*/
+
+class DMux4WayTest : public LogicGatesTest, 
+                     public testing::WithParamInterface<std::tuple<int, int, int>> {
+};
+
+TEST_P(DMux4WayTest, ComparesDMux4WayOutputToExpected) {
+    a.value = std::get<0>(GetParam());
+    sel2.value = std::get<1>(GetParam());
+    exp_bit4.value = std::get<2>(GetParam());
     DMux4Way(&a, &sel2, &res_bit4); 
-    bit4_u expected = { .value = 1 };
-    ASSERT_EQ(res_bit4.value, expected.value);
-
-    // a=1, sel=01
-    sel2.bit2_s.val0 = 1;
-    DMux4Way(&a, &sel2, &res_bit4); 
-    expected.value = 2;
-    ASSERT_EQ(res_bit4.value, expected.value);
-
-    // a=1, sel=10
-    sel2.bit2_s.val1 = 1;
-    sel2.bit2_s.val0 = 0;
-    DMux4Way(&a, &sel2, &res_bit4); 
-    expected.value = 4;
-    ASSERT_EQ(res_bit4.value, expected.value);
-
-    // a=1, sel=11
-    sel2.bit2_s.val0 = 1;
-    DMux4Way(&a, &sel2, &res_bit4); 
-    expected.value = 8;
-    ASSERT_EQ(res_bit4.value, expected.value);
+    ASSERT_EQ(res_bit4.value, exp_bit4.value);
 }
 
-TEST_F(LogicGatesTest, DMux8Way) {
-    // a=1, sel3=000
-    a.value = 1;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    byte1_u expected = { .value = 1 };
-    ASSERT_EQ(res_byte1.value, expected.value);
+INSTANTIATE_TEST_SUITE_P(
+    DMux4WayTestParameterized,
+    DMux4WayTest,
+    testing::Values(
+        std::make_tuple(1, 0, 1),
+        std::make_tuple(1, 1, 2),
+        std::make_tuple(1, 2, 4),
+        std::make_tuple(1, 3, 8)
+    )
+);
 
-    // a=1, sel3=001
-    sel3.bit3_s.val0 = 1;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 2;
-    ASSERT_EQ(res_byte1.value, expected.value);
+/* 
+-------------------------------------------------------------------------------
+                            DMUX8WAY GATE TESTS
+-------------------------------------------------------------------------------
+*/
 
-    // a=1, sel=010
-    sel3.bit3_s.val1 = 1;
-    sel3.bit3_s.val0 = 0;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 4;
-    ASSERT_EQ(res_byte1.value, expected.value);
+class DMux8WayTest : public LogicGatesTest, 
+                     public testing::WithParamInterface<std::tuple<int, int, int>> {
+};
 
-    // a=1, sel=011
-    sel3.bit3_s.val0 = 1;
+TEST_P(DMux8WayTest, ComparesDMux8WayOutputToExpected) {
+    a.value = std::get<0>(GetParam());
+    sel3.value = std::get<1>(GetParam());
+    exp_byte1.value = std::get<2>(GetParam());
     DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 8;
-    ASSERT_EQ(res_byte1.value, expected.value);
-
-    // a=1, sel=100
-    sel3.bit3_s.val2 = 1;
-    sel3.bit3_s.val1 = 0;
-    sel3.bit3_s.val0 = 0;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 16;
-    ASSERT_EQ(res_byte1.value, expected.value);
-
-    // a=1, sel=101
-    sel3.bit3_s.val0 = 1;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 32;
-    ASSERT_EQ(res_byte1.value, expected.value);
-
-    // a=1, sel=110
-    sel3.bit3_s.val1 = 1;
-    sel3.bit3_s.val0 = 0;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 64;
-    ASSERT_EQ(res_byte1.value, expected.value);
-
-    // a=1, sel=111
-    sel3.bit3_s.val0 = 1;
-    DMux8Way(&a, &sel3, &res_byte1); 
-    expected.value = 128;
-    ASSERT_EQ(res_byte1.value, expected.value);
+    ASSERT_EQ(res_byte1.value, exp_byte1.value);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    DMux8WayTestParameterized,
+    DMux8WayTest,
+    testing::Values(
+        std::make_tuple(1, 0, 1),
+        std::make_tuple(1, 1, 2),
+        std::make_tuple(1, 2, 4),
+        std::make_tuple(1, 3, 8),
+        std::make_tuple(1, 4, 16),
+        std::make_tuple(1, 5, 32),
+        std::make_tuple(1, 6, 64),
+        std::make_tuple(1, 7, 128)
+    )
+);
 
 
