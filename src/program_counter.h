@@ -3,13 +3,11 @@
 
 #include "memory.h"
 
-struct ProgramCounter {
-    Register16_u reg;
-};
-void UpdateProgramCounter(ProgramCounter& pc, 
-                          const byte2_u& in, 
-                          const bit1_u& load, 
-                          const bit1_u& increment, 
-                          const bit1_u& reset);
+typedef Register16_u ProgramCounter;
+void UpdateProgramCounter(ProgramCounter *pc, 
+                          union byte2_u *in, 
+                          union bit1_u *load, 
+                          union bit1_u *increment, 
+                          union bit1_u *reset);
 
 # endif // PROGRAM_COUNTER_H
