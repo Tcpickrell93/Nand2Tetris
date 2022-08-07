@@ -2,40 +2,41 @@
 #include "logic_gates.h"
 #include "bits.h"
 
-
+/*
 void UpdateDFF(union bit1_u *dff, 
                union bit1_u *in) {
     dff->bit1_s.val = in->value;
 }
-
 void UpdateDFF16(union byte2_u *dff16,
                  union byte2_u *in) {
     dff16->value = in->value;
 }
-
-void UpdateRegisterBit(union RegisterBit_u *rb, 
+*/
+void UpdateRegisterBit(RegisterBit_u *rb, 
                        union bit1_u *in, 
                        union bit1_u *load) {
-    UpdateDFF(rb->regbit_s.dff, Mux(rb->regbit_s.dff, in, load));
+    rb->value = Mux(rb, in, load)->value;
 }
 
-void UpdateRegister16(union Register16_u *r16, 
+void UpdateRegister16(Register16_u *r16, 
                       union byte2_u *in, 
                       union bit1_u *load) {
-    UpdateDFF16(r16->r16_s.dff16, Mux16(r16->r16_s.dff16, in, load));
+    r16->value = Mux16(r16, in, load)->value;
 }
 
 union byte2_u* ReadRAM8(struct RAM8 *ram,
                         union bit3_u *address) {
-    return Mux8Way16(ram->reg0->r16_s.dff16,
-              ram->reg1->r16_s.dff16,
-              ram->reg2->r16_s.dff16,
-              ram->reg3->r16_s.dff16,
-              ram->reg4->r16_s.dff16,
-              ram->reg5->r16_s.dff16,
-              ram->reg6->r16_s.dff16,
-              ram->reg7->r16_s.dff16,
-              address);
+    return Mux8Way16(
+        &ram->reg0,
+        &ram->reg1,
+        &ram->reg2,
+        &ram->reg3,
+        &ram->reg4,
+        &ram->reg5,
+        &ram->reg6,
+        &ram->reg7,
+        address
+    );
 }
 
 void WriteRAM8(struct RAM8 *ram, 
@@ -44,28 +45,28 @@ void WriteRAM8(struct RAM8 *ram,
                union bit1_u *load) {
     switch (address->value) {
         case 0: 
-            UpdateRegister16(ram->reg0, in, load);
+            UpdateRegister16(&ram->reg0, in, load);
             break;
         case 1: 
-            UpdateRegister16(ram->reg1, in, load);
+            UpdateRegister16(&ram->reg1, in, load);
             break;
         case 2: 
-            UpdateRegister16(ram->reg2, in, load);
+            UpdateRegister16(&ram->reg2, in, load);
             break;
         case 3: 
-            UpdateRegister16(ram->reg3, in, load);
+            UpdateRegister16(&ram->reg3, in, load);
             break;
         case 4: 
-            UpdateRegister16(ram->reg4, in, load);
+            UpdateRegister16(&ram->reg4, in, load);
             break;
         case 5: 
-            UpdateRegister16(ram->reg5, in, load);
+            UpdateRegister16(&ram->reg5, in, load);
             break;
         case 6: 
-            UpdateRegister16(ram->reg6, in, load);
+            UpdateRegister16(&ram->reg6, in, load);
             break;
         case 7: 
-            UpdateRegister16(ram->reg7, in, load);
+            UpdateRegister16(&ram->reg7, in, load);
             break;
         default:
             break;
@@ -85,14 +86,14 @@ union byte2_u* ReadRAM64(struct RAM64 *ram,
         .bit3_s.val2 = address->bit6_s.val5
     };
     return Mux8Way16(
-        ReadRAM8(ram->ram0, &reg16_address),
-        ReadRAM8(ram->ram1, &reg16_address),
-        ReadRAM8(ram->ram2, &reg16_address),
-        ReadRAM8(ram->ram3, &reg16_address),
-        ReadRAM8(ram->ram4, &reg16_address),
-        ReadRAM8(ram->ram5, &reg16_address),
-        ReadRAM8(ram->ram6, &reg16_address),
-        ReadRAM8(ram->ram7, &reg16_address),
+        ReadRAM8(&ram->ram0, &reg16_address),
+        ReadRAM8(&ram->ram1, &reg16_address),
+        ReadRAM8(&ram->ram2, &reg16_address),
+        ReadRAM8(&ram->ram3, &reg16_address),
+        ReadRAM8(&ram->ram4, &reg16_address),
+        ReadRAM8(&ram->ram5, &reg16_address),
+        ReadRAM8(&ram->ram6, &reg16_address),
+        ReadRAM8(&ram->ram7, &reg16_address),
         &ram8_address
     );
 }
@@ -113,34 +114,35 @@ void WriteRAM64(struct RAM64 *ram,
     };
     switch (ram8_address.value) {
         case 0: 
-            WriteRAM8(ram->ram0, &reg16_address, in, load);
+            WriteRAM8(&ram->ram0, &reg16_address, in, load);
             break;
         case 1: 
-            WriteRAM8(ram->ram1, &reg16_address, in, load);
+            WriteRAM8(&ram->ram1, &reg16_address, in, load);
             break;
         case 2: 
-            WriteRAM8(ram->ram2, &reg16_address, in, load);
+            WriteRAM8(&ram->ram2, &reg16_address, in, load);
             break;
         case 3: 
-            WriteRAM8(ram->ram3, &reg16_address, in, load);
+            WriteRAM8(&ram->ram3, &reg16_address, in, load);
             break;
         case 4: 
-            WriteRAM8(ram->ram4, &reg16_address, in, load);
+            WriteRAM8(&ram->ram4, &reg16_address, in, load);
             break;
         case 5: 
-            WriteRAM8(ram->ram5, &reg16_address, in, load);
+            WriteRAM8(&ram->ram5, &reg16_address, in, load);
             break;
         case 6: 
-            WriteRAM8(ram->ram6, &reg16_address, in, load);
+            WriteRAM8(&ram->ram6, &reg16_address, in, load);
             break;
         case 7: 
-            WriteRAM8(ram->ram7, &reg16_address, in, load);
+            WriteRAM8(&ram->ram7, &reg16_address, in, load);
             break;
         default:
             break;
     }
 }
 
+/*
 union byte2_u* ReadRAM512(struct RAM512 *ram, 
                           union bit9_u *address) {
     union bit6_u ram8_address = { 
@@ -365,3 +367,4 @@ void WriteRAM16k(struct RAM16k *ram,
             break;
     }
 }
+*/
