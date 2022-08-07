@@ -46,7 +46,6 @@ void WriteRAM64(struct RAM64 *ram,
                 union byte2_u *in,
                 union bit1_u *load);
 
-/*
 struct RAM512 {
     struct RAM64 ram0;
     struct RAM64 ram1;
@@ -93,6 +92,6 @@ void WriteRAM16k(struct RAM16k *ram,
                  union bit14_u *address, 
                  union byte2_u *in, 
                  union bit1_u *load);
-*/
+
 #endif // MEMORY_H
 
