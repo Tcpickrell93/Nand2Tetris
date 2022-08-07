@@ -1,58 +1,66 @@
-#include "../src/program_counter.h"
-
 #include <gtest/gtest.h>
 #include <iostream>
 
+extern "C"
+{
+#include "../src/program_counter.h"
+#include "../src/bits.h"
+}
 
 class ProgramCounterTest: public ::testing::Test {
     protected:
-        ProgramCounter counter = ProgramCounter();
+        ProgramCounter pc = ProgramCounter();
 
-        const bit load_1 { 0b1u };
-        const bit load_0 { 0b0u };
+        union byte2_u in16 = { .value = 0 };
+        union bit1_u load = { .value = 0 };
+        union bit1_u reset = { .value = 0 };
+        union bit1_u increment = { .value = 0 };
 
-        const bit reset_1 { 0b1u };
-        const bit reset_0 { 0b0u };
+        union byte2_u res_byte2 = { .value = 0 };
+        union byte2_u* p_res_byte2 = &res_byte2;
 
-        const bit increment_1 { 0b1u };
-        const bit increment_0 { 0b0u };
-
-        const byte2 in16_1s { 0b1111'1111'1111'1111u };
-        const byte2 in16_0s { 0b0000'0000'0000'0000u };
+        union bit1_u exp_bit1 = { .value = 0 };
+        union byte2_u exp_byte2 = { .value = 0 };
 };
 
+/* 
+-------------------------------------------------------------------------------
+                      PROGRAM COUNTER INCREMENT TESTS
+-------------------------------------------------------------------------------
+*/
 TEST_F(ProgramCounterTest, increment_test) {
     // initial parameter values
-    counter.Update(in16_1s, load_0, increment_0, reset_0);
-    byte2 result { counter.Out() };
-    byte2 expected { 0b0000'0000'0000'0000u };
-    ASSERT_EQ(result, expected);
-
+    ASSERT_EQ(pc.value, exp_byte2.value);
+    UpdateProgramCounter(&pc, &in16, &load, &increment, &reset);
+    ASSERT_EQ(pc.value, exp_byte2.value);
+    
     // increment the counter
-    counter.Update(in16_0s, load_0, increment_1, reset_0);
-    result = counter.Out();
-    expected = 0b0000'0000'0000'0001u; 
-    ASSERT_EQ(result, expected);
+    increment.value = 1;
+    UpdateProgramCounter(&pc, &in16, &load, &increment, &reset);
+    exp_byte2.value = 1;
+    ASSERT_EQ(pc.value, exp_byte2.value);
 }
 
 TEST_F(ProgramCounterTest, reset_test) {
     // increment the counter
-    counter.Update(in16_0s, load_0, increment_1, reset_0);
-    byte2 result { counter.Out() };
-    // make sure value is non-zero
-    byte2 expected { 0b0000'0000'0000'0001u }; 
-    ASSERT_EQ(result, expected);
+    increment.value = 1;
+    UpdateProgramCounter(&pc, &in16, &load, &increment, &reset);
+    exp_byte2.value = 1;
+    ASSERT_EQ(pc.value, exp_byte2.value);
+
     // reset the counter
-    counter.Update(in16_1s, load_0, increment_0, reset_1);
-    result = counter.Out();
-    expected = 0b0000'0000'0000'0000u; 
-    ASSERT_EQ(result, expected);
+    increment.value = 0;
+    reset.value = 1;
+    UpdateProgramCounter(&pc, &in16, &load, &increment, &reset);
+    exp_byte2.value = 0;
+    ASSERT_EQ(pc.value, exp_byte2.value);
 }
 
 TEST_F(ProgramCounterTest, load_test) {
     // load value into counter
-    counter.Update(in16_1s, load_1, increment_0, reset_0);
-    byte2 result { counter.Out() };
-    byte2 expected { 0b1111'1111'1111'1111u };
-    ASSERT_EQ(result, expected);
+    load.value = 1;
+    in16.value = 10;
+    UpdateProgramCounter(&pc, &in16, &load, &increment, &reset);
+    exp_byte2.value = 10;
+    ASSERT_EQ(pc.value, exp_byte2.value);
 }
