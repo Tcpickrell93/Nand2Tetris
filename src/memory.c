@@ -102,16 +102,14 @@ void WriteRAM64(struct RAM64 *ram,
                 union bit6_u *address,
                 union byte2_u *in,
                 union bit1_u *load) {
-    union bit3_u reg16_address = { 
-        .bit3_s.val0 = address->bit6_s.val0,
-        .bit3_s.val1 = address->bit6_s.val1,
-        .bit3_s.val2 = address->bit6_s.val2 
-    };
-    union bit3_u ram8_address = {
-        .bit3_s.val0 = address->bit6_s.val3,
-        .bit3_s.val1 = address->bit6_s.val4,
-        .bit3_s.val2 = address->bit6_s.val5
-    };
+    union bit3_u reg16_address = { .value = 0 }; 
+    reg16_address.bit3_s.val0 = address->bit6_s.val0;
+    reg16_address.bit3_s.val1 = address->bit6_s.val1;
+    reg16_address.bit3_s.val2 = address->bit6_s.val2; 
+    union bit3_u ram8_address = { .value = 0 };
+    ram8_address.bit3_s.val0 = address->bit6_s.val3;
+    ram8_address.bit3_s.val1 = address->bit6_s.val4;
+    ram8_address.bit3_s.val2 = address->bit6_s.val5;
     switch (ram8_address.value) {
         case 0: 
             WriteRAM8(&ram->ram0, &reg16_address, in, load);
