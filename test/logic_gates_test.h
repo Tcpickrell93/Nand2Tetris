@@ -18,6 +18,9 @@ class LogicGatesTest : public ::testing::Test {
         union byte1_u res_byte1 = { .value = 0 };
         union byte2_u res_byte2 = { .value = 0 };
 
+        union bit1_u* p_res_bit1 = &res_bit1;
+        union byte2_u* p_res_byte2 = &res_byte2;
+
         union bit1_u sel = { .value = 0 };
         union bit2_u sel2 = { .value = 0 };
         union bit3_u sel3 = { .value = 0 };
@@ -197,8 +200,8 @@ TEST_P(MuxTest, ComparesMuxOutputToExpected) {
     b.value = std::get<1>(GetParam());
     sel.value = std::get<2>(GetParam());
     exp_bit1.value = std::get<3>(GetParam());
-    res_bit1 = *Mux(&a, &b, &sel);
-    ASSERT_EQ(res_bit1.value, exp_bit1.value);
+    p_res_bit1 = Mux(&a, &b, &sel);
+    ASSERT_EQ(p_res_bit1->value, exp_bit1.value);
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -382,8 +385,8 @@ TEST_P(Mux16Test, ComparesMux16OutputToExpected) {
     b16.value = std::get<1>(GetParam());
     sel.value = std::get<2>(GetParam());
     exp_byte2.value = std::get<3>(GetParam());
-    res_byte2 = *Mux16(&a16, &b16, &sel);
-    ASSERT_EQ(res_byte2.value, exp_byte2.value);
+    p_res_byte2 = Mux16(&a16, &b16, &sel);
+    ASSERT_EQ(p_res_byte2->value, exp_byte2.value);
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -447,8 +450,8 @@ TEST_P(Mux4Way16Test, ComparesMux4Way16OutputToExpected) {
     d16.value = std::get<3>(GetParam());
     sel2.value = std::get<4>(GetParam());
     exp_byte2.value = std::get<5>(GetParam());
-    res_byte2 = *Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
-    ASSERT_EQ(res_byte2.value, exp_byte2.value);
+    p_res_byte2 = Mux4Way16(&a16, &b16, &c16, &d16, &sel2); 
+    ASSERT_EQ(p_res_byte2->value, exp_byte2.value);
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -483,8 +486,8 @@ TEST_P(Mux8Way16Test, ComparesMux8Way16OutputToExpected) {
     h16.value = std::get<7>(GetParam());
     sel3.value = std::get<8>(GetParam());
     exp_byte2.value = std::get<9>(GetParam());
-    res_byte2 = *Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
-    ASSERT_EQ(res_byte2.value, exp_byte2.value);
+    p_res_byte2 = Mux8Way16(&a16, &b16, &c16, &d16, &e16, &f16, &g16, &h16, &sel3); 
+    ASSERT_EQ(p_res_byte2->value, exp_byte2.value);
 }
 
 INSTANTIATE_TEST_SUITE_P(
