@@ -59,10 +59,8 @@ void FullAdder(union bit1_u *a,
 void Add16(union byte2_u *a, 
            union byte2_u *b,
            union byte2_u *result) {
-    result->value = 0;
     union bit1_u carry = { .value = 0 };
     union bit2_u temp_res = { .value = 0 };
-
     union bit1_u a_bit = { .value = a->byte2_s.val0 };
     union bit1_u b_bit = { .value = b->byte2_s.val0 };
     FullAdder(&a_bit, &b_bit, &carry, &temp_res);
@@ -160,10 +158,11 @@ void Add16(union byte2_u *a,
     carry.bit1_s.val = temp_res.bit2_s.val1;
 }
     
-void Inc16(union byte2_u *a,
-           union byte2_u *result) {
+union byte2_u Inc16(union byte2_u *a) {
     union byte2_u increment = { .value = 1 };
-    Add16(a, &increment, result);
+    union byte2_u result = { .value = 0 };
+    Add16(a, &increment, &result);
+    return result;
 }
 
 void ALU(union byte2_u *a, 

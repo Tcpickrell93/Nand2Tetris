@@ -17,8 +17,7 @@ void Add16(union byte2_u *a,
            union byte2_u *b,
            union byte2_u *result);
 
-void Inc16(union byte2_u *a,
-           union byte2_u *result);
+union byte2_u Inc16(union byte2_u *a);
 
 void ALU(union byte2_u *a, 
          union byte2_u *b, 

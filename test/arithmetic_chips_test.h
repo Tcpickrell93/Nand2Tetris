@@ -31,6 +31,8 @@ class ArithmeticChipsTest: public ::testing::Test {
         union byte1_u res_byte1 = { .value = 0 };
         union byte2_u res_byte2 = { .value = 0 };
 
+        union byte2_u* p_res_byte2 = &res_byte2;
+
         union bit1_u exp_bit1 = { .value = 0 };
         union bit2_u exp_bit2 = { .value = 0 };
         union bit4_u exp_bit4 = { .value = 0 };
@@ -147,7 +149,7 @@ class Inc16Test : public ArithmeticChipsTest,
 TEST_P(Inc16Test, ComparesInc16OutputToExpected) {
     a16.value = std::get<0>(GetParam());
     exp_byte2.value = std::get<1>(GetParam());
-    Inc16(&a16, &res_byte2);
+    res_byte2 = Inc16(&a16);
     ASSERT_EQ(res_byte2.value, exp_byte2.value);
 }
 
