@@ -52,11 +52,8 @@ union bit1_u* Mux(union bit1_u *a,
                   union bit1_u *b, 
                   union bit1_u *sel) {
     /* 2-bit Multiplexor */
-    if (sel->bit1_s.val == 0) { 
-        return a;
-    } else {
-        return b;
-    }
+    if (sel->bit1_s.val == 0) { return a; }
+    return b;
 }
 
 void DMux(union bit1_u *a, 
